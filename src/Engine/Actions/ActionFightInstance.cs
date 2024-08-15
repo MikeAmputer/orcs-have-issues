@@ -1,0 +1,123 @@
+﻿using System.Text;
+
+namespace Engine;
+
+public class ActionFightInstance : ActionBase
+{
+	public static ActionFightInstance GoblinCamp => new(
+		"Goblin Camp",
+		actionPointsCost: 3, expReward: 10, goldReward: 5, materialsReward: 2,
+		() => [Monster.Goblin, Monster.GoblinSoldier]);
+
+	private readonly string _name;
+
+	private readonly int _actionPointsCost;
+	private readonly int _expReward;
+	private readonly int _goldReward;
+	private readonly int _materialsReward;
+
+	private readonly Func<Fighter[]> _enemies;
+
+	private ActionFightInstance(
+		string name,
+		int actionPointsCost,
+		int expReward,
+		int goldReward,
+		int materialsReward,
+		Func<Fighter[]> enemies)
+	{
+		_name = name;
+		_actionPointsCost = actionPointsCost;
+		_expReward = expReward;
+		_goldReward = goldReward;
+		_materialsReward = materialsReward;
+		_enemies = enemies;
+	}
+
+	protected override bool IsAvailable(Character character)
+	{
+		return character.CurrentAp >= _actionPointsCost
+			&& character.CanFight;
+	}
+
+	protected override ActionReport ExecuteCore(string[] parameters, Character character)
+	{
+		if (parameters.Length > 1)
+		{
+			return ActionReport.Empty;
+		}
+
+		var times = parameters.Length == 0 ? 1 : parameters[0].TryConvertToInt32(0);
+
+		if (times == 0)
+		{
+			return ActionReport.Empty;
+		}
+
+		var startingHp = character.CurrentHp;
+		var startingAp = character.CurrentAp;
+
+		var wins = 0;
+		for (var i = 0; i < times; i++)
+		{
+			var fight = new Fight([character], _enemies());
+			if (fight.Simulate())
+			{
+				wins++;
+			}
+
+			character.SpendAp(_actionPointsCost);
+
+			if (!IsAvailable(character))
+			{
+				break;
+			}
+		}
+
+		var logMessage = ProcessResults(character, wins, startingHp, startingAp);
+		return ActionReport.FromMessage(logMessage);
+	}
+
+	private string ProcessResults(Character character, int wins, int startingHp, int startingAp)
+	{
+		var deltaExp = wins * _expReward;
+		var deltaGold = wins * _goldReward;
+		var deltaMats = wins * _materialsReward;
+		var deltaHp = startingHp - character.CurrentHp;
+		var deltaAp = startingAp - character.CurrentAp;
+
+		character.AddReward(deltaExp, deltaGold, deltaMats);
+
+		var sb = new StringBuilder($"Fight {_name}");
+
+		if (wins > 1)
+		{
+			sb.Append($" ({wins} wins)");
+		}
+
+		if (wins == 0)
+		{
+			sb.Append(" (defeat)");
+		}
+
+		if (deltaExp > 0)
+		{
+			sb.Append($" `+{deltaExp} Exp`");
+		}
+
+		if (deltaGold > 0)
+		{
+			sb.Append($" `+{deltaGold} Gold`");
+		}
+
+		if (deltaMats > 0)
+		{
+			sb.Append($" `+{deltaMats} Materials`");
+		}
+
+		sb.Append($" `-{deltaHp} HP`");
+		sb.Append($" `-{deltaAp} AP`");
+
+		return sb.ToString();
+	}
+}

@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using CommandLine;
+﻿using CommandLine;
 using Engine;
 using Octokit;
 using Octokit.Internal;
@@ -13,66 +12,21 @@ var options = Parser.Default.ParseArguments<Options>(args).Value;
 var credentialStore = new InMemoryCredentialStore(new Credentials(options.GitHubToken));
 var since = DateTimeOffset.UtcNow.AddHours(-options.PeriodHours);
 
-var batchPagination = new ApiOptions
-{
-	PageSize = 100
-};
 
 var ghClient = new GitHubClient(productInfo, credentialStore);
 
 var repository = await ghClient.Repository.Get(owner, repositoryName);
 
-Logging.LogGitHubClientState(ghClient);
-Logging.LogInfo("Requesting issues");
+Logging.RateLimitProvider = () => ghClient.GetLastApiInfo()?.RateLimit;
 
-var issues = await ghClient.Issue.GetAllForRepository(
-	repository.Id,
-	new RepositoryIssueRequest
-	{
-		Filter = IssueFilter.All,
-		State = ItemStateFilter.Open,
-		SortProperty = IssueSort.Updated,
-		SortDirection = SortDirection.Ascending,
-		Since = since,
-	},
-	batchPagination);
+var issueRepository = await IssueRepository.Create(repository, ghClient.Issue, since);
 
-Logging.LogGitHubClientState(ghClient);
-Logging.LogInfo("Requesting comments");
+var characters = issueRepository.GetCharacters().ToList();
 
-var comments = await ghClient.Issue.Comment.GetAllForRepository(
-	repository.Id,
-	new IssueCommentRequest
-	{
-		Sort = IssueCommentSort.Updated,
-		Direction = SortDirection.Ascending,
-		Since = since,
-	},
-	batchPagination);
+Logging.LogInfo("Start fight");
 
-Logging.LogGitHubClientState(ghClient);
+var result = ActionRunner.Execute("fight goblin-camp 3", characters[0]);
 
-var characterIssueRegex = new Regex("^character", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-var characterRepository = new CharacterRepository();
+Logging.LogInfo("End fight");
 
-foreach (var issue in issues)
-{
-	var userId = issue.User.Id;
-
-	if (!characterIssueRegex.IsMatch(issue.Title))
-	{
-		continue;
-	}
-
-	if (characterRepository.ContainsUser(userId))
-	{
-		continue;
-	}
-
-	characterRepository.Add(
-		userId,
-		new Character
-		{
-			UserLogin = issue.User.Login
-		});
-}
+Logging.LogInfo("Complete");

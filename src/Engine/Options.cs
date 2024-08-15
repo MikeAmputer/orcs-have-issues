@@ -5,7 +5,7 @@ namespace Engine;
 public class Options
 {
 	[Option("token", Required = true)]
-	public string GitHubToken { get; set; }
+	public string GitHubToken { get; set; } = string.Empty;
 
 	[Option("test-mode", Default = true)]
 	public bool TestMode { get; set; }
