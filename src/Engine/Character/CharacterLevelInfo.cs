@@ -6,6 +6,8 @@ public class CharacterLevelInfo
 	public int Exp { get; private set; } = 0;
 	public int CurrentLevelExp { get; private set; } = 0;
 
+	public int UntilNextLevel => ExpRequirements[Level + 1] - CurrentLevelExp;
+
 	private int _nextLevelRequirement = ExpRequirements.First().Value;
 	private readonly int _maxLevel = ExpRequirements.Last().Key;
 

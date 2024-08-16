@@ -3,7 +3,7 @@ using Octokit;
 
 namespace Engine;
 
-public class IssueRepository
+public class PlayerDataRepository
 {
 	private static readonly Regex CharacterIssueRegex = new(
 		"^character",
@@ -16,23 +16,25 @@ public class IssueRepository
 		PageSize = 100
 	};
 
+	private const int CommandMaxLength = 100;
+
 	private readonly Repository _gitHubRepository;
 	private readonly Dictionary<int, Issue> _issues = new();
 	private readonly Dictionary<int, IssueComment?> _characterStates = new();
 	private readonly Dictionary<int, IssueComment> _characterActions = new();
 	private HashSet<long> _stargazers = null!;
 
-	private IssueRepository(Repository gitHubRepository)
+	private PlayerDataRepository(Repository gitHubRepository)
 	{
 		_gitHubRepository = gitHubRepository;
 	}
 
-	public static async Task<IssueRepository> Create(
+	public static async Task<PlayerDataRepository> Create(
 		Repository gitHubRepository,
 		IGitHubClient gitHubClient,
 		DateTimeOffset since)
 	{
-		var result = new IssueRepository(gitHubRepository);
+		var result = new PlayerDataRepository(gitHubRepository);
 
 		await result.LoadIssues(gitHubClient.Issue, since);
 		await result.LoadComments(gitHubClient.Issue.Comment, since);
@@ -41,17 +43,31 @@ public class IssueRepository
 		return result;
 	}
 
-	public IEnumerable<Character> GetCharacters()
+	public IEnumerable<(Character character, string[] commands)> GetCharacters()
 	{
 		foreach (var (key, issue) in _issues)
 		{
-			var playerInfo = issue.ToPlayerInfo(_stargazers.Contains(issue.User.Id));
 			var dto = _characterStates.TryGetValue(key, out var state)
 				? state.ToCharacterDto()
 				: new CharacterDto();
 
-			yield return new Character(playerInfo, dto);
+			var playerInfo = issue.ToPlayerInfo(_stargazers.Contains(issue.User.Id), state?.Id);
+
+			yield return (new Character(playerInfo, dto), GetCommands(key));
 		}
+	}
+
+	private string[] GetCommands(int issueNumber)
+	{
+		if (!_characterActions.TryGetValue(issueNumber, out var comment))
+		{
+			return [];
+		}
+
+		return comment.Body
+			.Split(["\r\n", "\r", "\n"], StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+			.Where(command => command.Length <= CommandMaxLength)
+			.ToArray();
 	}
 
 	private async Task<bool> LoadIssues(IIssuesClient issuesClient, DateTimeOffset since)
@@ -164,16 +180,16 @@ public class IssueRepository
 		return true;
 	}
 
-	private static IssueComment? FindActionsComment(IEnumerable<IssueComment> issues, long issueAuthor)
+	private static IssueComment? FindActionsComment(IEnumerable<IssueComment> comments, long issueAuthor)
 	{
-		return issues
+		return comments
 			.Where(comment => comment.User.Id == issueAuthor)
 			.MaxBy(comment => comment.CreatedAt);
 	}
 
-	private static IssueComment? FindStateComment(IEnumerable<IssueComment> issues, long repositoryOwner)
+	private static IssueComment? FindStateComment(IEnumerable<IssueComment> comments, long repositoryOwner)
 	{
-		return issues
+		return comments
 			.Where(comment => comment.User.Id == repositoryOwner)
 			.Where(comment => comment.Body.StartsWith("### Stats"))
 			.MinBy(comment => comment.CreatedAt);

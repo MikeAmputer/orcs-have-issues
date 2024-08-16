@@ -1,4 +1,5 @@
-﻿using CommandLine;
+﻿using System.Text;
+using CommandLine;
 using Engine;
 using Octokit;
 using Octokit.Internal;
@@ -19,14 +20,33 @@ var repository = await ghClient.Repository.Get(owner, repositoryName);
 
 Logging.RateLimitProvider = () => ghClient.GetLastApiInfo()?.RateLimit;
 
-var issueRepository = await IssueRepository.Create(repository, ghClient.Issue, since);
+var issueRepository = await PlayerDataRepository.Create(repository, ghClient, since);
 
 var characters = issueRepository.GetCharacters().ToList();
 
-Logging.LogInfo("Start fight");
+foreach (var (character, commands) in characters)
+{
+	var logs = new StringBuilder();
+	foreach (var command in commands)
+	{
+		var actionReport = ActionRunner.Execute(command, character);
+		if (actionReport.IsExecuted)
+		{
+			logs.AppendLine(actionReport.LogMessage);
+		}
+	}
 
-var result = ActionRunner.Execute("fight goblin-camp 3", characters[0]);
+	var stateBody = character.ToStateCommentBody(logs.ToString());
 
-Logging.LogInfo("End fight");
+	if (character.PlayerInfo.StateCommentId != null)
+	{
+		await ghClient.Issue.Comment.Update(repository.Id, character.PlayerInfo.StateCommentId.Value, stateBody);
+	}
+	else
+	{
+		await ghClient.Issue.Comment.Create(repository.Id, character.PlayerInfo.IssueNumber, stateBody);
+	}
+}
 
+Logging.LogGitHubClientState();
 Logging.LogInfo("Complete");
