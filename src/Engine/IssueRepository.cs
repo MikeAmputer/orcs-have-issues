@@ -20,6 +20,7 @@ public class IssueRepository
 	private readonly Dictionary<int, Issue> _issues = new();
 	private readonly Dictionary<int, IssueComment?> _characterStates = new();
 	private readonly Dictionary<int, IssueComment> _characterActions = new();
+	private HashSet<long> _stargazers = null!;
 
 	private IssueRepository(Repository gitHubRepository)
 	{
@@ -28,13 +29,14 @@ public class IssueRepository
 
 	public static async Task<IssueRepository> Create(
 		Repository gitHubRepository,
-		IIssuesClient issuesClient,
+		IGitHubClient gitHubClient,
 		DateTimeOffset since)
 	{
 		var result = new IssueRepository(gitHubRepository);
 
-		await result.LoadIssues(issuesClient, since);
-		await result.LoadComments(issuesClient.Comment, since);
+		await result.LoadIssues(gitHubClient.Issue, since);
+		await result.LoadComments(gitHubClient.Issue.Comment, since);
+		await result.LoadStargazers(gitHubClient.Activity.Starring, gitHubRepository);
 
 		return result;
 	}
@@ -43,7 +45,7 @@ public class IssueRepository
 	{
 		foreach (var (key, issue) in _issues)
 		{
-			var playerInfo = issue.ToPlayerInfo();
+			var playerInfo = issue.ToPlayerInfo(_stargazers.Contains(issue.User.Id));
 			var dto = _characterStates.TryGetValue(key, out var state)
 				? state.ToCharacterDto()
 				: new CharacterDto();
@@ -175,5 +177,18 @@ public class IssueRepository
 			.Where(comment => comment.User.Id == repositoryOwner)
 			.Where(comment => comment.Body.StartsWith("### Stats"))
 			.MinBy(comment => comment.CreatedAt);
+	}
+
+	private async Task LoadStargazers(IStarredClient starredClient, Repository gitHubRepository)
+	{
+		Logging.LogInfo("Requesting stargazers");
+
+		var stars = await starredClient
+			.GetAllStargazersWithTimestamps(gitHubRepository.Id, BatchPagination);
+
+		Logging.LogInfo("Stargazers retrieved");
+		Logging.LogGitHubClientState();
+
+		_stargazers = stars.Select(s => s.User.Id).ToHashSet();
 	}
 }

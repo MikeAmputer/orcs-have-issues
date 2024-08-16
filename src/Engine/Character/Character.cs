@@ -36,6 +36,7 @@ public class Character : Fighter
 		ApplyWeaponRanks(dto.WeaponRank);
 
 		ApplyReactions();
+		ApplyStargazing();
 
 		CurrentHp = MaxHp;
 		CurrentAp = MaxAp;
@@ -104,5 +105,14 @@ public class Character : Fighter
 		Attack += reactions / 20;
 		Defence += (reactions + 10) / 20;
 		MaxAp += reactions / 50;
+	}
+
+	private void ApplyStargazing()
+	{
+		if (PlayerInfo.IsStargazer)
+		{
+			Attack += 1;
+			Defence += 1;
+		}
 	}
 }

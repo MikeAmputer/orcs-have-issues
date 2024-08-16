@@ -6,4 +6,5 @@ public class PlayerInfo
 	public string UserLogin { get; init; }
 
 	public int IssueReactions { get; init; }
+	public bool IsStargazer { get; init; }
 }
