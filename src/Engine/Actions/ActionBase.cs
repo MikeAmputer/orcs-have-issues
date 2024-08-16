@@ -1,38 +1,26 @@
 ﻿namespace Engine;
 
-public abstract class ActionBase
+public abstract class ActionBase<TParameters, TParametersProvider> : IAction
+	where TParametersProvider : ActionParametersProvider<TParameters>, new()
 {
+	private readonly TParametersProvider _parametersProvider = new();
+
 	public ActionReport Execute(string[] parameters, Character character)
 	{
-		if (SubCommands == null)
-		{
-			return ExecuteCore(parameters, character);
-		}
-
-		if (parameters.Length == 0)
+		if (!IsAvailable(character))
 		{
 			return ActionReport.Empty;
 		}
 
-		if (!SubCommands.TryGetValue(parameters[0], out var action))
+		if (!_parametersProvider.TryParseParameters(parameters, out var typedParams))
 		{
 			return ActionReport.Empty;
 		}
 
-		if (!action.IsAvailable(character))
-		{
-			return ActionReport.Empty;
-		}
-
-		return action.Execute(parameters[1..], character);
+		return ExecuteCore(typedParams, character);
 	}
 
-	protected virtual Dictionary<string, ActionBase>? SubCommands { get; } = null;
-
-	protected virtual ActionReport ExecuteCore(string[] parameters, Character character)
-	{
-		return ActionReport.Empty;
-	}
+	protected abstract ActionReport ExecuteCore(TParameters parameters, Character character);
 
 	protected virtual bool IsAvailable(Character character)
 	{

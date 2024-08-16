@@ -1,29 +1,22 @@
 ﻿namespace Engine;
 
-public static class ActionRunner
+public sealed class ActionRunner : SubAction
 {
-	private static readonly Dictionary<string, ActionBase> _actions = new()
+	protected override Dictionary<string, IAction> SubCommands => new()
 	{
+		{ "select-race", new ActionRaceSelection() },
 		{ "fight", new ActionFight() },
 	};
 
-	public static ActionReport Execute(string command, Character character)
+	private static readonly ActionRunner Instance = new();
+
+	public new static ActionReport Execute(string command, Character character)
 	{
 		var parameters = command
 			.Trim()
 			.ToLower()
 			.Split(' ', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
 
-		if (parameters.Length == 0)
-		{
-			return ActionReport.Empty;
-		}
-
-		if (!_actions.TryGetValue(parameters[0], out var action))
-		{
-			return ActionReport.Empty;
-		}
-
-		return action.Execute(parameters[1..], character);
+		return Instance.Execute(parameters, character);
 	}
 }

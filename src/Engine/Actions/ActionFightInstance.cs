@@ -2,7 +2,7 @@
 
 namespace Engine;
 
-public class ActionFightInstance : ActionBase
+public sealed class ActionFightInstance : ActionBase<int, TimesActionParametersProvider>
 {
 	public static ActionFightInstance GoblinCamp => new(
 		"Goblin Camp",
@@ -40,20 +40,8 @@ public class ActionFightInstance : ActionBase
 			&& character.CanFight;
 	}
 
-	protected override ActionReport ExecuteCore(string[] parameters, Character character)
+	protected override ActionReport ExecuteCore(int times, Character character)
 	{
-		if (parameters.Length > 1)
-		{
-			return ActionReport.Empty;
-		}
-
-		var times = parameters.Length == 0 ? 1 : parameters[0].TryConvertToInt32(0);
-
-		if (times == 0)
-		{
-			return ActionReport.Empty;
-		}
-
 		var startingHp = character.CurrentHp;
 		var startingAp = character.CurrentAp;
 

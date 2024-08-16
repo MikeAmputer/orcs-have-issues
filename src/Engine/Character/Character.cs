@@ -4,7 +4,7 @@ public class Character : Fighter
 {
 	public PlayerInfo PlayerInfo { get; }
 
-	public Race Race { get; private set; }
+	public Race Race { get; private set; } = Race.None;
 
 	public CharacterLevelInfo LevelInfo { get; }
 	public int Gold { get; private set; }
@@ -21,7 +21,7 @@ public class Character : Fighter
 	{
 		PlayerInfo = playerInfo;
 
-		Race = dto.Race;
+		SelectRace(dto.Race);
 
 		LevelInfo = new CharacterLevelInfo(dto.Exp);
 		Gold = dto.Gold;
@@ -40,6 +40,30 @@ public class Character : Fighter
 
 		CurrentHp = MaxHp;
 		CurrentAp = MaxAp;
+	}
+
+	public void SelectRace(Race race)
+	{
+		if (Race != Race.None)
+		{
+			return;
+		}
+
+		Race = race;
+
+		switch (Race)
+		{
+			case Race.None:
+				break;
+			case Race.Human:
+				Defence++;
+				break;
+			case Race.Orc:
+				Attack++;
+				break;
+			default:
+				throw new ArgumentOutOfRangeException();
+		}
 	}
 
 	public void AddReward(int exp, int gold, int materials)
