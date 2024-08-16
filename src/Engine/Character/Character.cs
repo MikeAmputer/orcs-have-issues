@@ -59,9 +59,11 @@ public class Character : Fighter
 				break;
 			case Race.Human:
 				Defence++;
+
 				break;
 			case Race.Orc:
 				Attack++;
+
 				break;
 			default:
 				throw new ArgumentOutOfRangeException();
@@ -104,15 +106,37 @@ public class Character : Fighter
 				break;
 			case LevelUpSelection.Atk:
 				Attack += 1;
+
 				break;
 			case LevelUpSelection.Def:
 				Defence += 1;
+
 				break;
 			default:
 				throw new ArgumentOutOfRangeException();
 		}
 
 		LevelUps.Add(levelUp);
+	}
+
+	public bool CraftWeapon(int gold, int mats) =>
+		Craft(gold, mats, character => character.ApplyWeaponRanks(1));
+
+	public bool CraftArmor(int gold, int mats) =>
+		Craft(gold, mats, character => character.ApplyArmorRanks(1));
+
+	private bool Craft(int gold, int mats, Action<Character> applyAction)
+	{
+		if (Gold < gold || Materials < mats)
+		{
+			return false;
+		}
+
+		Gold -= gold;
+		Materials -= mats;
+		applyAction(this);
+
+		return true;
 	}
 
 	private void ApplyArmorRanks(int increment)

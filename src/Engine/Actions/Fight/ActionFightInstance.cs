@@ -2,13 +2,8 @@
 
 namespace Engine;
 
-public sealed class ActionFightInstance : ActionBase<int, TimesActionParametersProvider>
+public sealed partial class ActionFightInstance : ActionBase<int, TimesActionParametersProvider>
 {
-	public static ActionFightInstance GoblinCamp => new(
-		"Goblin Camp",
-		actionPointsCost: 3, expReward: 10, goldReward: 5, materialsReward: 2,
-		() => [Monster.Goblin, Monster.GoblinSoldier]);
-
 	private readonly string _name;
 
 	private readonly int _actionPointsCost;

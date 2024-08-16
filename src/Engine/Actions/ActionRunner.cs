@@ -7,6 +7,7 @@ public sealed class ActionRunner : SubAction
 		{ "select-race", new ActionRaceSelection() },
 		{ "level-up", new ActionLevelUp() },
 		{ "fight", new ActionFight() },
+		{ "craft", new ActionCraft() },
 	};
 
 	private static readonly ActionRunner Instance = new();
