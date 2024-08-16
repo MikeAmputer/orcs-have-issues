@@ -2,6 +2,8 @@
 
 public class Character : Fighter
 {
+	public const int MaxHpLevelUps = 10;
+
 	public PlayerInfo PlayerInfo { get; }
 
 	public Race Race { get; private set; } = Race.None;
@@ -66,6 +68,10 @@ public class Character : Fighter
 		}
 	}
 
+	public bool IsLevelUpAvailable => LevelInfo.Level > LevelUps.Count;
+
+	public bool CanLevelUpHp => LevelUps.Count(selection => selection == LevelUpSelection.Hp) < MaxHpLevelUps;
+
 	public void AddReward(int exp, int gold, int materials)
 	{
 		LevelInfo.AddExp(exp);
@@ -78,11 +84,9 @@ public class Character : Fighter
 		CurrentAp -= ap;
 	}
 
-	private const int MaxLvlUpHp = 10;
-
 	private int _lvlUpHp = 0;
 
-	private void ApplyLevelUpSelection(LevelUpSelection levelUp)
+	public void ApplyLevelUpSelection(LevelUpSelection levelUp)
 	{
 		switch (levelUp)
 		{
@@ -90,9 +94,11 @@ public class Character : Fighter
 				break;
 			case LevelUpSelection.Hp:
 				_lvlUpHp++;
-				if (_lvlUpHp <= MaxLvlUpHp)
+				if (_lvlUpHp <= MaxHpLevelUps)
 				{
-					MaxHp += 11 - _lvlUpHp;
+					var delta = MaxHpLevelUps + 1 - _lvlUpHp;
+					MaxHp += delta;
+					CurrentHp += delta;
 				}
 
 				break;

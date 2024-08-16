@@ -27,6 +27,8 @@ public class CharacterLevelInfo
 		}
 	}
 
+	public static int TotalExpForLevel(int level) => ExpRequirements.Take(level).Sum(kvp => kvp.Value);
+
 	private static readonly Dictionary<int, int> ExpRequirements = new()
 	{
 		{ 1, 25 },
