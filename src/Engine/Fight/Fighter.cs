@@ -2,6 +2,8 @@
 
 public abstract class Fighter
 {
+	protected abstract int BaseDamage { get; }
+
 	public int Attack { get; protected set; } = 0;
 	public int Defence { get; protected set; } = 0;
 
@@ -12,7 +14,9 @@ public abstract class Fighter
 
 	public bool CanFight => CurrentHp > 0;
 
-	public int Damage => (int) (Attack * (2 + WeaponRank * 0.1) + 5);
+	public int Damage => (int) (Attack * (2 + WeaponRank * 0.1) + BaseDamage);
+
+	public virtual int ExpReward => 0;
 
 	public void TakeDamage(int damage)
 	{
@@ -24,5 +28,9 @@ public abstract class Fighter
 		CurrentHp -= (int) (damage * damage / (damage + Math.Pow(Defence, 1 + ArmorRank * 0.1)));
 
 		CurrentHp = Math.Max(0, CurrentHp);
+	}
+
+	public virtual void ScoreFrag(Fighter target)
+	{
 	}
 }

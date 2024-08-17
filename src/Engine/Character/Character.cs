@@ -19,6 +19,15 @@ public class Character : Fighter
 
 	public int CurrentAp { get; private set; }
 
+	protected override int BaseDamage => 5;
+
+	public override int ExpReward => LevelInfo.Level * 2 + 5;
+
+	public override void ScoreFrag(Fighter target)
+	{
+		LevelInfo.AddExp(target.ExpReward);
+	}
+
 	public Character(PlayerInfo playerInfo, CharacterDto dto)
 	{
 		PlayerInfo = playerInfo;

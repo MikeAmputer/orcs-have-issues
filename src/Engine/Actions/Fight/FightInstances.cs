@@ -2,8 +2,18 @@ namespace Engine;
 
 public sealed partial class ActionFightInstance
 {
-	public static ActionFightInstance GoblinCamp => new(
+	public static readonly ActionFightInstance SpiderLair = new(
+		"Spider Lair",
+		actionPointsCost: 4, goldReward: 2, materialsReward: 3,
+		() => [Monster.SpiderWhelp, Monster.SpiderGuardian, Monster.SpiderWhelp, Monster.SpiderWhelp]);
+
+	public static readonly ActionFightInstance SpiderLairElite = new(
+		"Spider Lair (Elite)",
+		actionPointsCost: 4, goldReward: 4, materialsReward: 6,
+		() => [Monster.SpiderGuardian, Monster.SpiderGuardian, Monster.SpiderScout, Monster.SpiderAmbusher]);
+
+	public static readonly ActionFightInstance GoblinCamp = new(
 		"Goblin Camp",
-		actionPointsCost: 3, expReward: 10, goldReward: 5, materialsReward: 2,
+		actionPointsCost: 4, goldReward: 5, materialsReward: 2,
 		() => [Monster.Goblin, Monster.GoblinSoldier]);
 }

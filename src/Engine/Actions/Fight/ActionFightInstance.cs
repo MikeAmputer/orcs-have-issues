@@ -7,7 +7,6 @@ public sealed partial class ActionFightInstance : ActionBase<int, TimesActionPar
 	private readonly string _name;
 
 	private readonly int _actionPointsCost;
-	private readonly int _expReward;
 	private readonly int _goldReward;
 	private readonly int _materialsReward;
 
@@ -16,14 +15,12 @@ public sealed partial class ActionFightInstance : ActionBase<int, TimesActionPar
 	private ActionFightInstance(
 		string name,
 		int actionPointsCost,
-		int expReward,
 		int goldReward,
 		int materialsReward,
 		Func<Fighter[]> enemies)
 	{
 		_name = name;
 		_actionPointsCost = actionPointsCost;
-		_expReward = expReward;
 		_goldReward = goldReward;
 		_materialsReward = materialsReward;
 		_enemies = enemies;
@@ -39,6 +36,7 @@ public sealed partial class ActionFightInstance : ActionBase<int, TimesActionPar
 	{
 		var startingHp = character.CurrentHp;
 		var startingAp = character.CurrentAp;
+		var startingExp = character.LevelInfo.Exp;
 
 		var wins = 0;
 		for (var i = 0; i < times; i++)
@@ -57,13 +55,13 @@ public sealed partial class ActionFightInstance : ActionBase<int, TimesActionPar
 			}
 		}
 
-		var logMessage = ProcessResults(character, wins, startingHp, startingAp);
+		var logMessage = ProcessResults(character, wins, startingHp, startingAp, startingExp);
 		return ActionReport.FromMessage(logMessage);
 	}
 
-	private string ProcessResults(Character character, int wins, int startingHp, int startingAp)
+	private string ProcessResults(Character character, int wins, int startingHp, int startingAp, int startingExp)
 	{
-		var deltaExp = wins * _expReward;
+		var deltaExp = character.LevelInfo.Exp - startingExp;
 		var deltaGold = wins * _goldReward;
 		var deltaMats = wins * _materialsReward;
 		var deltaHp = startingHp - character.CurrentHp;

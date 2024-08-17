@@ -96,6 +96,8 @@ public class Fight
 
 		if (!target.CanFight)
 		{
+			source.ScoreFrag(target);
+
 			if (targetIsAttacker)
 			{
 				_aliveAttackers.Remove(targetId);
