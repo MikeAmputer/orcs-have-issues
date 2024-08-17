@@ -67,7 +67,7 @@ public sealed partial class ActionFightInstance : ActionBase<int, TimesActionPar
 		var deltaHp = startingHp - character.CurrentHp;
 		var deltaAp = startingAp - character.CurrentAp;
 
-		character.AddReward(deltaExp, deltaGold, deltaMats);
+		character.AddReward(0, deltaGold, deltaMats);
 
 		var sb = new StringBuilder($"Fight {_name}");
 
