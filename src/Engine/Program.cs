@@ -27,7 +27,7 @@ var characters = issueRepository.GetCharacters().ToList();
 
 foreach (var (character, commands) in characters)
 {
-	var logs = new StringBuilder($"Time of processing: `{utcNow}`");
+	var logs = new StringBuilder($"Processed at: `{utcNow}`");
 	logs.AppendLine();
 	foreach (var command in commands)
 	{

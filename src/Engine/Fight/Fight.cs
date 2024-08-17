@@ -94,25 +94,26 @@ public class Fight
 
 		target.TakeDamage(source.Damage);
 
-		if (!target.CanFight)
+		if (target.CanFight)
 		{
-			source.ScoreFrag(target);
-
-			if (targetIsAttacker)
-			{
-				_aliveAttackers.Remove(targetId);
-				_attackersAlive--;
-			}
-			else
-			{
-				_aliveDefenders.Remove(targetId);
-				_defendersAlive--;
-			}
-
-			return FightFinished;
+			return false;
 		}
 
-		return false;
+		source.ScoreFrag(target);
+
+		if (targetIsAttacker)
+		{
+			_aliveAttackers.Remove(targetId);
+			_attackersAlive--;
+		}
+		else
+		{
+			_aliveDefenders.Remove(targetId);
+			_defendersAlive--;
+		}
+
+		return FightFinished;
+
 	}
 
 	private static int GetTargetId(HashSet<int> targets, int lastAttacked)

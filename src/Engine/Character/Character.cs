@@ -19,7 +19,7 @@ public class Character : Fighter
 
 	public int CurrentAp { get; private set; }
 
-	protected override int BaseDamage => 5;
+	protected override int BaseDamage => 4;
 
 	public override int ExpReward => LevelInfo.Level * 2 + 5;
 
