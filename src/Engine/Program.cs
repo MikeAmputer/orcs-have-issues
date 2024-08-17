@@ -11,7 +11,8 @@ const string version = "1";
 var productInfo = new ProductHeaderValue(owner, version);
 var options = Parser.Default.ParseArguments<Options>(args).Value;
 var credentialStore = new InMemoryCredentialStore(new Credentials(options.GitHubToken));
-var since = DateTimeOffset.UtcNow.AddHours(-options.PeriodHours);
+var utcNow = DateTimeOffset.UtcNow;
+var since = utcNow.AddHours(-options.PeriodHours);
 
 
 var ghClient = new GitHubClient(productInfo, credentialStore);
@@ -26,7 +27,8 @@ var characters = issueRepository.GetCharacters().ToList();
 
 foreach (var (character, commands) in characters)
 {
-	var logs = new StringBuilder();
+	var logs = new StringBuilder($"Time of processing: `{utcNow}`");
+	logs.AppendLine();
 	foreach (var command in commands)
 	{
 		var actionReport = ActionRunner.Execute(command, character);
@@ -37,6 +39,12 @@ foreach (var (character, commands) in characters)
 	}
 
 	var stateBody = character.ToStateCommentBody(logs.ToString());
+
+	if (options.TestMode)
+	{
+		Logging.LogInfo(stateBody);
+		continue;
+	}
 
 	if (character.PlayerInfo.StateCommentId != null)
 	{
