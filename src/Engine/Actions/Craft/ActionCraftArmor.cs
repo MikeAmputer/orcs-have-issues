@@ -24,11 +24,11 @@ public class ActionCraftArmor : ActionBase<object?, EmptyActionParametersProvide
 
 	private static readonly Dictionary<int, (int gold, int mats)> Requirements = new()
 	{
-		{ 1, (50, 30) },
-		{ 2, (150, 90) },
-		{ 3, (600, 180) },
-		{ 4, (1500, 340) },
-		{ 5, (5000, 700) },
+		{ 1, (50, 10) },
+		{ 2, (150, 30) },
+		{ 3, (600, 90) },
+		{ 4, (1500, 180) },
+		{ 5, (5000, 400) },
 		{ 6, (100000, 100000) },
 	};
 }
