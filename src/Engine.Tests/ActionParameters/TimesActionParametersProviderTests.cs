@@ -63,4 +63,15 @@ public class TimesActionParametersProviderTests
 
 		Assert.IsFalse(success);
 	}
+
+	[TestMethod]
+	public void LongValue_Unsuccessful()
+	{
+		string[] parameters = ["100000000000"];
+
+		var provider = new TimesActionParametersProvider();
+		var success = provider.TryParseParameters(parameters, out _);
+
+		Assert.IsFalse(success);
+	}
 }

@@ -17,6 +17,7 @@ public class PlayerDataRepository
 	};
 
 	private const int CommandMaxLength = 100;
+	private const int CommandsMaxQuantity = 20;
 
 	private readonly Repository _gitHubRepository;
 	private readonly Dictionary<int, Issue> _issues = new();
@@ -67,6 +68,7 @@ public class PlayerDataRepository
 		return comment.Body
 			.Split(["\r\n", "\r", "\n"], StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
 			.Where(command => command.Length <= CommandMaxLength)
+			.Take(CommandsMaxQuantity)
 			.ToArray();
 	}
 

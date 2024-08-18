@@ -46,6 +46,7 @@ public class RaceActionParametersProviderTests
 	[DataRow("0")]
 	[DataRow("3")]
 	[DataRow("nonexistent")]
+	[DataRow("10000000000")]
 	public void InvalidValue_Unsuccessful(string parameter)
 	{
 		string[] parameters = [parameter];

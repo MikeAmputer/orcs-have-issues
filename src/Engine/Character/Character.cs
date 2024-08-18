@@ -23,6 +23,8 @@ public class Character : Fighter
 
 	public override int ExpReward => LevelInfo.Level * 2 + 5;
 
+	private FortressBuff? _fortressBuff;
+
 	public override void ScoreFrag(Fighter target)
 	{
 		LevelInfo.AddExp(target.ExpReward);
@@ -60,12 +62,14 @@ public class Character : Fighter
 			return;
 		}
 
+		DisableFortressBuff();
 		Race = race;
+		_fortressBuff = ServerState.Instance.GetFortressBuffFor(Race);
 
 		switch (Race)
 		{
 			case Race.None:
-				break;
+				return;
 			case Race.Human:
 				Defence++;
 
@@ -77,6 +81,8 @@ public class Character : Fighter
 			default:
 				throw new ArgumentOutOfRangeException();
 		}
+
+		EnableFortressBuff();
 	}
 
 	public bool IsLevelUpAvailable => LevelInfo.Level > LevelUps.Count;
@@ -109,7 +115,7 @@ public class Character : Fighter
 				{
 					var delta = MaxHpLevelUps + 1 - _lvlUpHp;
 					MaxHp += delta;
-					CurrentHp += delta;
+					CurrentHp += delta;;
 				}
 
 				break;
@@ -174,8 +180,23 @@ public class Character : Fighter
 	{
 		if (PlayerInfo.IsStargazer)
 		{
-			Attack += 1;
-			Defence += 1;
+			Attack++;
+			Defence++;
 		}
+	}
+
+	private void EnableFortressBuff()
+	{
+		Attack += _fortressBuff?.Attack ?? 0;
+		Defence += _fortressBuff?.Defence ?? 0;
+		MaxHp += _fortressBuff?.MaxHp ?? 0;
+		CurrentHp += _fortressBuff?.MaxHp ?? 0;
+	}
+
+	private void DisableFortressBuff()
+	{
+		Attack -= _fortressBuff?.Attack ?? 0;
+		Defence -= _fortressBuff?.Defence ?? 0;
+		MaxHp -= _fortressBuff?.MaxHp ?? 0;
 	}
 }
