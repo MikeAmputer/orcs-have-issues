@@ -4,26 +4,26 @@ public class Fortress
 {
 	public static readonly Fortress Southern = new()
 	{
-		Id = 1,
+		Id = FortressId.South,
 		Name = "Southern Fortress",
 		Buff = buff => buff.MaxHp += 15,
 	};
 
 	public static readonly Fortress Northern = new()
 	{
-		Id = 2,
+		Id = FortressId.North,
 		Name = "Northern Fortress",
 		Buff = buff => buff.Attack += 1,
 	};
 
 	public static readonly Fortress Western = new()
 	{
-		Id = 3,
+		Id = FortressId.West,
 		Name = "Western Fortress",
 		Buff = buff => buff.Defence += 1,
 	};
 
-	public required int Id { get; init; }
+	public required FortressId Id { get; init; }
 	public required string Name { get; init; }
 	public required Action<FortressBuff> Buff { get; init; }
 

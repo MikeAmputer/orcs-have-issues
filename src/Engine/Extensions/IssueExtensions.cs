@@ -6,26 +6,26 @@ namespace Engine;
 
 public static class IssueExtensions
 {
-	private const string CharacterDtoRegexPattern = @"
+	private const string DtoRegexPattern = @"
 ```json
 (.+)
 ```
 ";
 
-	private static readonly Regex CharacterDtoRegex = new(CharacterDtoRegexPattern, RegexOptions.Compiled);
+	private static readonly Regex DtoRegex = new(DtoRegexPattern, RegexOptions.Compiled);
 
 	public static CharacterDto ToCharacterDto(this IssueComment? comment)
 	{
 		if (comment == null)
 		{
-			return new CharacterDto();
+			return new();
 		}
 
-		var jsonString = CharacterDtoRegex.Match(comment.Body).TryGetGroupValue(1);
+		var jsonString = DtoRegex.Match(comment.Body).TryGetGroupValue(1);
 
 		if (jsonString.IsNullOrWhiteSpace())
 		{
-			return new CharacterDto();
+			return new();
 		}
 
 		return JsonSerializer.Deserialize<CharacterDto>(jsonString)
@@ -42,5 +42,23 @@ public static class IssueExtensions
 			IssueReactions = issue.Reactions.Heart,
 			IsStargazer = isStargazer,
 		};
+	}
+
+	public static ServerStateDto ToServerStateDto(this Issue? issue)
+	{
+		if (issue == null)
+		{
+			return new();
+		}
+
+		var jsonString = DtoRegex.Match(issue.Body).TryGetGroupValue(1);
+
+		if (jsonString.IsNullOrWhiteSpace())
+		{
+			return new();
+		}
+
+		return JsonSerializer.Deserialize<ServerStateDto>(jsonString)
+			?? throw new InvalidOperationException($"Unable to deserialize server state DTO: {issue.HtmlUrl}.");
 	}
 }

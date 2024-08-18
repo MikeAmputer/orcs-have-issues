@@ -31,8 +31,8 @@ public class PlayerDataRepository
 	}
 
 	public static async Task<PlayerDataRepository> Create(
-		Repository gitHubRepository,
 		IGitHubClient gitHubClient,
+		Repository gitHubRepository,
 		DateTimeOffset since)
 	{
 		var result = new PlayerDataRepository(gitHubRepository);
