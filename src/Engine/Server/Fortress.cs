@@ -23,6 +23,14 @@ public class Fortress
 		Buff = buff => buff.Defence += 1,
 	};
 
+	public static string GetName(FortressId id) => id switch
+	{
+		FortressId.South => Southern.Name,
+		FortressId.North => Northern.Name,
+		FortressId.West => Western.Name,
+		_ => throw new ArgumentOutOfRangeException(nameof(id), id, null)
+	};
+
 	public required FortressId Id { get; init; }
 	public required string Name { get; init; }
 	public required Action<FortressBuff> Buff { get; init; }

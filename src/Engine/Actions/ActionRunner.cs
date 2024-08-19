@@ -10,6 +10,7 @@ public sealed class ActionRunner : SubAction
 		{ "labor", new ActionLabor() },
 		{ "craft", new ActionCraft() },
 		{ "buy-materials", new ActionBuyMaterials() },
+		{ "siege", new ActionSiege() },
 	};
 
 	private static readonly ActionRunner Instance = new();

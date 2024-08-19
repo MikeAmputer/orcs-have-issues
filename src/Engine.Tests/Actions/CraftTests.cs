@@ -14,7 +14,7 @@ public class CraftTests
 		Assert.AreEqual(1, character.WeaponRank);
 		Assert.AreEqual(0, character.ArmorRank);
 		Assert.AreEqual(950, character.Gold);
-		Assert.AreEqual(970, character.Materials);
+		Assert.AreEqual(990, character.Materials);
 	}
 
 	[TestMethod]
@@ -28,7 +28,7 @@ public class CraftTests
 		Assert.AreEqual(0, character.WeaponRank);
 		Assert.AreEqual(1, character.ArmorRank);
 		Assert.AreEqual(950, character.Gold);
-		Assert.AreEqual(970, character.Materials);
+		Assert.AreEqual(990, character.Materials);
 	}
 
 	[TestMethod]

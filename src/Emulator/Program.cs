@@ -25,7 +25,7 @@ while (true)
 
 	if (command == "show")
 	{
-		var fullText = character.ToStateCommentBody("no logs");
+		var fullText = character.ToStateCommentBody();
 		var state = statsRegex
 			.Match(fullText)
 			.Value

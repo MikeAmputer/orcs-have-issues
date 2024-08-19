@@ -69,7 +69,7 @@ public sealed partial class ActionFightInstance : ActionBase<int, TimesActionPar
 
 		character.AddReward(0, deltaGold, deltaMats);
 
-		var sb = new StringBuilder($"Fight {_name}");
+		var sb = new StringBuilder($"Fight **_{_name}_**");
 
 		if (wins > 1)
 		{
@@ -80,6 +80,8 @@ public sealed partial class ActionFightInstance : ActionBase<int, TimesActionPar
 		{
 			sb.Append(" (defeat)");
 		}
+
+		sb.Append(':');
 
 		if (deltaExp > 0)
 		{

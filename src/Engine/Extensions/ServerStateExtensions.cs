@@ -4,10 +4,13 @@ public static class ServerStateExtensions
 {
 	public static string ToStateIssueBody(this ServerState state)
 	{
+		var logs = state.Logs.ToString();
+
 		var dto = ServerStateDto.FromServerState(state);
 
 		var args = new object[]
 		{
+			logs,
 			dto.ToString(),
 		};
 
@@ -15,11 +18,14 @@ public static class ServerStateExtensions
 	}
 
 	private const string StateBodyTemplate = @"
+### Logs
+{0}
+___
 <details><summary>DTO</summary>
 <p>
 
 ```json
-{0}
+{1}
 ```
 
 </p>

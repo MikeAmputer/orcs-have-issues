@@ -44,7 +44,7 @@ public class PlayerDataRepository
 		return result;
 	}
 
-	public IEnumerable<(Character character, string[] commands)> GetCharacters()
+	public IEnumerable<(Character character, string[] commands)> GetCharacters(DateTimeOffset utcNow)
 	{
 		foreach (var (key, issue) in _issues)
 		{
@@ -54,7 +54,7 @@ public class PlayerDataRepository
 
 			var playerInfo = issue.ToPlayerInfo(_stargazers.Contains(issue.User.Id), state?.Id);
 
-			yield return (new Character(playerInfo, dto), GetCommands(key));
+			yield return (new Character(playerInfo, dto, utcNow), GetCommands(key));
 		}
 	}
 

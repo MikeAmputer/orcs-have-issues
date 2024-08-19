@@ -1,6 +1,6 @@
 ﻿namespace Engine;
 
-public sealed class ActionRaceSelection : ActionBase<Race, RaceActionParametersProvider>
+public sealed class ActionRaceSelection : ActionBase<Race, EnumActionParametersProvider<Race>>
 {
 	protected override bool IsAvailable(Character character)
 	{

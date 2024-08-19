@@ -58,7 +58,7 @@ public partial class ActionLaborInstance : ActionBase<int, TimesActionParameters
 
 		character.AddReward(0, deltaGold, deltaMats);
 
-		var sb = new StringBuilder($"Your hard work at the {_name} was paid off:");
+		var sb = new StringBuilder($"Your hard work at the **_{_name}_** was paid off:");
 
 		if (deltaGold > 0)
 		{

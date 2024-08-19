@@ -4,6 +4,8 @@ public abstract class Fighter
 {
 	protected abstract int BaseDamage { get; }
 
+	public virtual int Level => 0;
+
 	public int Attack { get; protected set; } = 0;
 	public int Defence { get; protected set; } = 0;
 

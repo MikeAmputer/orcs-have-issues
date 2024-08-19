@@ -4,8 +4,10 @@ namespace Engine;
 
 public static class CharacterExtensions
 {
-	public static string ToStateCommentBody(this Character character, string logs)
+	public static string ToStateCommentBody(this Character character)
 	{
+		var logs = character.Logs.ToString();
+
 		var dto = CharacterDto.FromCharacter(character);
 
 		var state = new StringBuilder($"Level {character.LevelInfo.Level}, {dto.Race}");
@@ -21,6 +23,12 @@ public static class CharacterExtensions
 		state.AppendLine($"Resources: `Gold: {dto.Gold}` `Materials: {dto.Materials}`");
 		state.AppendLine($"Equipment: `Weapon Rank: {dto.WeaponRank}` `Armor Rank: {dto.ArmorRank}`");
 		state.AppendLine($"Action points: `AP: {character.MaxAp}`");
+
+		var fortressBuffs = character.GetFortressBuffDescription("Fortress buffs:");
+		if (!fortressBuffs.IsNullOrWhiteSpace())
+		{
+			state.AppendLine(fortressBuffs);
+		}
 
 		var args = new object[]
 		{

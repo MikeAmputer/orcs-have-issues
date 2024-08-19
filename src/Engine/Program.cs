@@ -1,5 +1,4 @@
-﻿using System.Text;
-using CommandLine;
+﻿using CommandLine;
 using Engine;
 using Octokit;
 using Octokit.Internal;
@@ -20,26 +19,39 @@ var repository = await ghClient.Repository.Get(owner, repositoryName);
 
 Logging.RateLimitProvider = () => ghClient.GetLastApiInfo()?.RateLimit;
 
-await ServerState.Instance.Initialize(ghClient, repository);
+await ServerState.Instance.Initialize(ghClient, repository, utcNow);
 
 var playerData = await PlayerDataRepository.Create(ghClient, repository, since);
 
-var characters = playerData.GetCharacters().ToList();
+var characters = playerData.GetCharacters(utcNow).ToList();
+
+Logging.LogInfo("Executing commands");
 
 foreach (var (character, commands) in characters)
 {
-	var logs = new StringBuilder($"Processed at: `{utcNow}`");
-	logs.AppendLine();
 	foreach (var command in commands)
 	{
 		var actionReport = ActionRunner.Execute(command, character);
 		if (actionReport.IsExecuted)
 		{
-			logs.AppendLine(actionReport.LogMessage);
+			character.Logs.AppendLine(actionReport.LogMessage);
 		}
 	}
+}
 
-	var stateBody = character.ToStateCommentBody(logs.ToString());
+Logging.LogInfo("Commands executed");
+Logging.LogInfo("Simulating sieges");
+
+ServerState.Instance.SimulateSiege();
+
+Logging.LogInfo("Sieges simulated");
+Logging.LogInfo("Saving characters");
+
+foreach (var (character, _) in characters)
+{
+	character.PrepareForSave();
+
+	var stateBody = character.ToStateCommentBody();
 
 	if (options.TestMode)
 	{
@@ -57,6 +69,7 @@ foreach (var (character, commands) in characters)
 	}
 }
 
+Logging.LogInfo("Characters saved");
 Logging.LogGitHubClientState();
 Logging.LogInfo("Saving server state");
 

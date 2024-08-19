@@ -1,4 +1,6 @@
-﻿namespace Engine;
+﻿using System.Text;
+
+namespace Engine;
 
 public class Character : Fighter
 {
@@ -9,6 +11,8 @@ public class Character : Fighter
 	public Race Race { get; private set; } = Race.None;
 
 	public CharacterLevelInfo LevelInfo { get; }
+	public override int Level => LevelInfo.Level;
+
 	public int Gold { get; private set; }
 	public int Materials { get; private set; }
 
@@ -21,17 +25,23 @@ public class Character : Fighter
 
 	protected override int BaseDamage => 4;
 
-	public override int ExpReward => LevelInfo.Level * 2 + 5;
+	public override int ExpReward => 5 + Level * 3;
 
 	private FortressBuff? _fortressBuff;
 
-	public override void ScoreFrag(Fighter target)
-	{
-		LevelInfo.AddExp(target.ExpReward);
-	}
+	public bool IsSiegeParticipant { get; private set; }
 
-	public Character(PlayerInfo playerInfo, CharacterDto dto)
+	public int SiegeContributionPoints { get; private set; } = 0;
+
+	public StringBuilder Logs { get; } = new();
+
+	public Character(PlayerInfo playerInfo, CharacterDto dto, DateTimeOffset? utcNow = null)
 	{
+		if (utcNow != null)
+		{
+			Logs.AppendLine($"Processed at: `{utcNow}`");
+		}
+
 		PlayerInfo = playerInfo;
 
 		SelectRace(dto.Race);
@@ -62,7 +72,6 @@ public class Character : Fighter
 			return;
 		}
 
-		DisableFortressBuff();
 		Race = race;
 		_fortressBuff = ServerState.Instance.GetFortressBuffFor(Race);
 
@@ -115,7 +124,8 @@ public class Character : Fighter
 				{
 					var delta = MaxHpLevelUps + 1 - _lvlUpHp;
 					MaxHp += delta;
-					CurrentHp += delta;;
+					CurrentHp += delta;
+					;
 				}
 
 				break;
@@ -132,6 +142,53 @@ public class Character : Fighter
 		}
 
 		LevelUps.Add(levelUp);
+	}
+
+	public void MarkSiegeParticipant() => IsSiegeParticipant = true;
+
+	public int PrepareForSiege()
+	{
+		CurrentHp = Math.Min(MaxHp, CurrentHp + 30);
+
+		return SiegeContributionPoints;
+	}
+
+	public string? GetFortressBuffDescription(string title)
+	{
+		if (_fortressBuff == null || _fortressBuff.IsEmpty)
+		{
+			return null;
+		}
+
+		var sb = new StringBuilder(title);
+
+		if (_fortressBuff.MaxHp > 0)
+		{
+			sb.Append($" `+{_fortressBuff.MaxHp} HP`");
+		}
+
+		if (_fortressBuff.Attack > 0)
+		{
+			sb.Append($" `+{_fortressBuff.Attack} ATK`");
+		}
+
+		if (_fortressBuff.Defence > 0)
+		{
+			sb.Append($" `+{_fortressBuff.Defence} DEF`");
+		}
+
+		return sb.ToString();
+	}
+
+	public void PrepareForSave()
+	{
+		DisableFortressBuff();
+		_fortressBuff = ServerState.Instance.GetFortressBuffFor(Race);
+	}
+
+	public override void ScoreFrag(Fighter target)
+	{
+		LevelInfo.AddExp(target.ExpReward);
 	}
 
 	public bool CraftWeapon(int gold, int mats) =>
@@ -191,6 +248,13 @@ public class Character : Fighter
 		Defence += _fortressBuff?.Defence ?? 0;
 		MaxHp += _fortressBuff?.MaxHp ?? 0;
 		CurrentHp += _fortressBuff?.MaxHp ?? 0;
+
+		var buffsDescription = GetFortressBuffDescription("Fortress buffs applied:");
+
+		if (buffsDescription != null)
+		{
+			Logs.AppendLine(buffsDescription);
+		}
 	}
 
 	private void DisableFortressBuff()

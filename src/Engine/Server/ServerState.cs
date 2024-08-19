@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Text;
+using System.Text.RegularExpressions;
 using Octokit;
 
 namespace Engine;
@@ -15,6 +16,8 @@ public class ServerState
 
 	public int? IssueNumber => _stateIssueNumber;
 
+	public StringBuilder Logs { get; } = new();
+
 	public int MaterialsPriceFor(Race race) =>
 		MaterialsBasePrice - _fortresses.Count(f => f.Holder == race);
 
@@ -26,8 +29,46 @@ public class ServerState
 		_ => throw new ArgumentOutOfRangeException(nameof(race), race, null)
 	};
 
-	public async Task Initialize(IGitHubClient gitHubClient, Repository gitHubRepository)
+	public void AddSiegeParticipant(FortressId fortressId, Character character)
 	{
+		if (character.Race == Race.None || character.IsSiegeParticipant)
+		{
+			return;
+		}
+
+		_sieges[fortressId].Participants[character.Race].Add(character);
+		character.MarkSiegeParticipant();
+	}
+
+	public Dictionary<FortressId, Race> SimulateSiege()
+	{
+		var result = new Dictionary<FortressId, Race>();
+
+		foreach (var (fortressId, siege) in _sieges)
+		{
+			var fortress = _fortresses.Single(f => f.Id == fortressId);
+			var winner = siege.Simulate(fortress.Holder);
+
+			result.Add(fortressId, winner);
+
+			if (winner != fortress.Holder)
+			{
+				Logs.AppendLine($"`{fortress.Name}` has been captured by the `{winner.ToString()}s`");
+			}
+		}
+
+		ApplySiegeWinners(result);
+
+		return result;
+	}
+
+	public async Task Initialize(IGitHubClient gitHubClient, Repository gitHubRepository, DateTimeOffset? utcNow = null)
+	{
+		if (utcNow != null)
+		{
+			Logs.AppendLine($"Processed at: `{utcNow}`");
+		}
+
 		var stateIssue = await LoadServerStateIssue(gitHubClient.Issue, gitHubRepository);
 		_stateIssueNumber = stateIssue?.Number;
 
@@ -38,7 +79,21 @@ public class ServerState
 			_fortresses.Single(f => f.Id == fortressId).Holder = race;
 		}
 
-		// get dto and set _fortresses
+		RevaluateBuffs();
+	}
+
+	private void ApplySiegeWinners(Dictionary<FortressId, Race> winners)
+	{
+		foreach (var (fortressId, race) in winners)
+		{
+			_fortresses.Single(f => f.Id == fortressId).Holder = race;
+		}
+
+		RevaluateBuffs();
+	}
+
+	private void RevaluateBuffs()
+	{
 		_orcBuff = new();
 		FortressesUnderControl(Race.Orc).ToList().ForEach(f => f.Buff(_orcBuff));
 
@@ -59,6 +114,13 @@ public class ServerState
 		Fortress.Northern,
 		Fortress.Western
 	};
+
+	private readonly IReadOnlyDictionary<FortressId, SiegeFight> _sieges = new Dictionary<FortressId, SiegeFight>
+		{
+			{ FortressId.South, new() },
+			{ FortressId.North, new() },
+			{ FortressId.West, new() },
+		};
 
 	private static readonly Regex ServerStateIssueRegex = new(
 		"^server state",

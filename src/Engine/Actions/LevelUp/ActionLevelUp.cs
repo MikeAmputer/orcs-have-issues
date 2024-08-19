@@ -1,6 +1,6 @@
 ﻿namespace Engine;
 
-public class ActionLevelUp : ActionBase<LevelUpSelection, LevelUpActionParametersProvider>
+public class ActionLevelUp : ActionBase<LevelUpSelection, EnumActionParametersProvider<LevelUpSelection>>
 {
 	protected override bool IsAvailable(Character character)
 	{

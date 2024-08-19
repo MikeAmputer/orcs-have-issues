@@ -8,7 +8,7 @@ public class RaceActionParametersProviderTests
 	{
 		string[] parameters = [];
 
-		var provider = new RaceActionParametersProvider();
+		var provider = new EnumActionParametersProvider<Race>();
 		var success = provider.TryParseParameters(parameters, out var parameter);
 
 		Assert.IsFalse(success);
@@ -23,7 +23,7 @@ public class RaceActionParametersProviderTests
 	{
 		string[] parameters = [stringValue];
 
-		var provider = new RaceActionParametersProvider();
+		var provider = new EnumActionParametersProvider<Race>();
 		var success = provider.TryParseParameters(parameters, out var parameter);
 
 		Assert.IsTrue(success);
@@ -35,7 +35,7 @@ public class RaceActionParametersProviderTests
 	{
 		string[] parameters = ["human", "orc"];
 
-		var provider = new RaceActionParametersProvider();
+		var provider = new EnumActionParametersProvider<Race>();
 		var success = provider.TryParseParameters(parameters, out _);
 
 		Assert.IsFalse(success);
@@ -51,7 +51,7 @@ public class RaceActionParametersProviderTests
 	{
 		string[] parameters = [parameter];
 
-		var provider = new RaceActionParametersProvider();
+		var provider = new EnumActionParametersProvider<Race>();
 		var success = provider.TryParseParameters(parameters, out _);
 
 		Assert.IsFalse(success);
