@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Concurrent;
+using System.Text;
 using System.Text.RegularExpressions;
 using Octokit;
 
@@ -50,11 +51,11 @@ public class ServerState
 
 			if (fortress.Holder != Race.None)
 			{
-				Logs.AppendLine($"Siege of `{fortress.Name}`, held by `{fortress.Holder}s`, begins");
+				Logs.AppendLine($"Siege of {fortress.Name}, held by {fortress.Holder}s, begins");
 			}
 			else
 			{
-				Logs.AppendLine($"Battle for `{fortress.Name}` begins");
+				Logs.AppendLine($"Battle for {fortress.Name} begins");
 			}
 
 			var winner = siege.Simulate(fortress.Holder, Logs);
@@ -63,11 +64,15 @@ public class ServerState
 
 			if (winner != fortress.Holder)
 			{
-				Logs.AppendLine($"`{fortress.Name}` has been captured by the `{winner.ToString()}s`");
+				Logs.AppendLine($"{fortress.Name} has been captured by the {winner}s");
 			}
 			else if (fortress.Holder == Race.None)
 			{
-				Logs.AppendLine($"`{fortress.Name}` still belongs to nobody");
+				Logs.AppendLine($"`{fortress.Name} still belongs to nobody");
+			}
+			else
+			{
+				Logs.AppendLine($"`{fortress.Name} still belongs to {fortress.Holder}s");
 			}
 		}
 
@@ -94,7 +99,38 @@ public class ServerState
 		}
 
 		RevaluateBuffs();
+
+		_leaderboard = new(
+			dto.Leaderboard
+				.ToDictionary(
+					entry => entry.Login,
+					entry => (entry.IssueNumber, entry.Exp)));
 	}
+
+	public void UpdateLeaderboard(IEnumerable<Character> characters)
+	{
+		foreach (var character in characters)
+		{
+			_leaderboard.AddOrUpdate(
+				character.PlayerInfo.UserLogin,
+				(character.PlayerInfo.IssueNumber, character.LevelInfo.Exp),
+				(_, _) => (character.PlayerInfo.IssueNumber, character.LevelInfo.Exp));
+		}
+	}
+
+	public IEnumerable<LeaderboardEntryDto> GetLeaderboard(int length)
+	{
+		return _leaderboard.Select(kvp => new LeaderboardEntryDto()
+			{
+				Login = kvp.Key,
+				IssueNumber = kvp.Value.IssueNumber,
+				Exp = kvp.Value.Exp,
+			})
+			.OrderByDescending(entry => entry.Exp)
+			.Take(length);
+	}
+
+	private ConcurrentDictionary<string, (int IssueNumber, int Exp)> _leaderboard = new();
 
 	private void ApplySiegeWinners(Dictionary<FortressId, Race> winners)
 	{
@@ -130,11 +166,11 @@ public class ServerState
 	};
 
 	private readonly IReadOnlyDictionary<FortressId, SiegeFight> _sieges = new Dictionary<FortressId, SiegeFight>
-		{
-			{ FortressId.South, new() },
-			{ FortressId.North, new() },
-			{ FortressId.West, new() },
-		};
+	{
+		{ FortressId.South, new() },
+		{ FortressId.North, new() },
+		{ FortressId.West, new() },
+	};
 
 	private static readonly Regex ServerStateIssueRegex = new(
 		"^server state",

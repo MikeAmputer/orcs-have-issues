@@ -73,6 +73,7 @@ Logging.LogInfo("Characters saved");
 Logging.LogGitHubClientState();
 Logging.LogInfo("Saving server state");
 
+ServerState.Instance.UpdateLeaderboard(characters.Select(t => t.Character));
 var stateIssueBody = ServerState.Instance.ToStateIssueBody();
 
 if (!options.TestMode)

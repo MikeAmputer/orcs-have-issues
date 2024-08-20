@@ -44,7 +44,7 @@ public class PlayerDataRepository
 		return result;
 	}
 
-	public IEnumerable<(Character character, string[] commands)> GetCharacters(DateTimeOffset utcNow)
+	public IEnumerable<(Character Character, string[] Commands)> GetCharacters(DateTimeOffset utcNow)
 	{
 		foreach (var (key, issue) in _issues)
 		{
