@@ -47,13 +47,27 @@ public class ServerState
 		foreach (var (fortressId, siege) in _sieges)
 		{
 			var fortress = _fortresses.Single(f => f.Id == fortressId);
-			var winner = siege.Simulate(fortress.Holder);
+
+			if (fortress.Holder != Race.None)
+			{
+				Logs.AppendLine($"Siege of `{fortress.Name}`, held by `{fortress.Holder}s`, begins");
+			}
+			else
+			{
+				Logs.AppendLine($"Battle for `{fortress.Name}` begins");
+			}
+
+			var winner = siege.Simulate(fortress.Holder, Logs);
 
 			result.Add(fortressId, winner);
 
 			if (winner != fortress.Holder)
 			{
 				Logs.AppendLine($"`{fortress.Name}` has been captured by the `{winner.ToString()}s`");
+			}
+			else if (fortress.Holder == Race.None)
+			{
+				Logs.AppendLine($"`{fortress.Name}` still belongs to nobody");
 			}
 		}
 

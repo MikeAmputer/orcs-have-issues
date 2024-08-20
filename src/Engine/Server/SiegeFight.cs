@@ -1,4 +1,6 @@
-﻿namespace Engine;
+﻿using System.Text;
+
+namespace Engine;
 
 public class SiegeFight
 {
@@ -8,10 +10,12 @@ public class SiegeFight
 		{ Race.Orc, [] },
 	};
 
-	public Race Simulate(Race currentHolder)
+	public Race Simulate(Race currentHolder, StringBuilder logs)
 	{
 		if (Participants[Race.Orc].Count + Participants[Race.Human].Count == 0)
 		{
+			logs.AppendLine("No one came to the battle");
+
 			return currentHolder;
 		}
 
@@ -21,8 +25,20 @@ public class SiegeFight
 		var orcFighters = new List<Fighter>(Participants[Race.Orc]);
 		var humanFighters = new List<Fighter>(Participants[Race.Human]);
 
+		var orcPlayers = orcFighters.Count;
+		var humanPlayers = humanFighters.Count;
+
 		orcFighters.AddRange(GetOrcReinforcement(orcContribution));
 		humanFighters.AddRange(GetHumanReinforcement(humanContribution));
+
+		var orcMercs = orcFighters.Count - orcPlayers;
+		var humanMercs = humanFighters.Count - humanPlayers;
+
+		logs.Append($"Orcs: `{orcPlayers}` players with reinforcement of `{orcMercs}` mercenaries");
+		logs.AppendLine($" (`{orcContribution}` siege contribution points)");
+
+		logs.Append($"Humans: `{humanPlayers}` players with reinforcement of `{humanMercs}` mercenaries");
+		logs.AppendLine($" (`{humanContribution}` siege contribution points)");
 
 		var orderByLevel = true;
 
@@ -106,6 +122,7 @@ public class SiegeFight
 		get
 		{
 			_defaultAttacker = GetNextAttacker(_defaultAttacker);
+
 			return _defaultAttacker;
 		}
 	}

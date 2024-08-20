@@ -1,4 +1,6 @@
-﻿namespace Engine.Tests;
+﻿using System.Text;
+
+namespace Engine.Tests;
 
 [TestClass]
 public class SiegeFightTests
@@ -9,7 +11,7 @@ public class SiegeFightTests
 	{
 		var siege = new SiegeFight();
 
-		var winner = siege.Simulate(race);
+		var winner = siege.Simulate(race, new StringBuilder());
 
 		Assert.AreEqual(race, winner);
 	}
@@ -36,7 +38,7 @@ public class SiegeFightTests
 				throw new ArgumentOutOfRangeException(nameof(expectedWinner), expectedWinner, null);
 		}
 
-		var winner = siege.Simulate(holder);
+		var winner = siege.Simulate(holder, new StringBuilder());
 
 		Assert.AreEqual(expectedWinner, winner);
 	}
@@ -50,7 +52,7 @@ public class SiegeFightTests
 		siege.Participants[Race.Human].AddRange(CreateCharacters(humans, Race.Human));
 		siege.Participants[Race.Orc].AddRange(CreateCharacters(orcs, Race.Orc));
 
-		var winner = siege.Simulate(Race.None);
+		var winner = siege.Simulate(Race.None, new StringBuilder());
 
 		Assert.AreNotEqual(Race.None, winner);
 	}
