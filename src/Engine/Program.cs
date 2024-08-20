@@ -24,6 +24,7 @@ await ServerState.Instance.Initialize(ghClient, repository, utcNow);
 var playerData = await PlayerDataRepository.Create(ghClient, repository, since);
 
 var characters = playerData.GetCharacters(utcNow).ToList();
+await Logging.LogCharactersToFile(characters);
 
 Logging.LogInfo("Executing commands");
 

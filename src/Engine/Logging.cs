@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Text;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Logging.Console;
 using Octokit;
@@ -32,6 +33,44 @@ public static class Logging
 		}
 
 		LogInfo($"Remaining API calls: {rateLimit.Remaining} / {rateLimit.Limit}");
+	}
+
+	private const string CharactersArtifactPath = "./artifacts/characters.txt";
+
+	public static Task LogCharactersToFile(List<(Character Character, string[] Commands)> characters)
+	{
+		var text = new StringBuilder();
+
+		foreach (var (character, commands) in characters)
+		{
+			AppendCharacter(text, character, commands);
+		}
+
+		var directoryPath = Path.GetDirectoryName(CharactersArtifactPath);
+		if (!Directory.Exists(directoryPath))
+		{
+			Directory.CreateDirectory(directoryPath!);
+		}
+
+		return File.WriteAllTextAsync(CharactersArtifactPath, text.ToString());
+	}
+
+	private static void AppendCharacter(StringBuilder sb, Character character, string[] commands)
+	{
+		var playerInfo = character.PlayerInfo;
+		sb.AppendLine($"Character #{playerInfo.IssueNumber} {playerInfo.UserLogin}");
+		sb.Append($"StateCommentId: {playerInfo.StateCommentId?.ToString() ?? "none"}; ");
+		sb.AppendLine($"IsStargazer: {playerInfo.IsStargazer}; IssueReactions: {playerInfo.IssueReactions}");
+		sb.AppendLine($"DTO: {CharacterDto.FromCharacter(character).ToString()}");
+
+		sb.AppendLine("Commands:");
+
+		foreach (var command in commands)
+		{
+			sb.AppendLine(command);
+		}
+
+		sb.AppendLine("___\n");
 	}
 }
 
