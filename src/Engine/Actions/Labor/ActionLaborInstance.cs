@@ -10,19 +10,22 @@ public partial class ActionLaborInstance : ActionBase<int, TimesActionParameters
 	private readonly int _actionPointsCost;
 	private readonly int _goldReward;
 	private readonly int _materialsReward;
+	private readonly int _siegeContribution;
 
 	private ActionLaborInstance(
 		string name,
 		int requiredLevel,
 		int actionPointsCost,
 		int goldReward,
-		int materialsReward)
+		int materialsReward,
+		int siegeContribution)
 	{
 		_name = name;
 		_requiredLevel = requiredLevel;
 		_actionPointsCost = actionPointsCost;
 		_goldReward = goldReward;
 		_materialsReward = materialsReward;
+		_siegeContribution = siegeContribution;
 	}
 
 	protected override bool IsAvailable(Character character)
@@ -55,8 +58,9 @@ public partial class ActionLaborInstance : ActionBase<int, TimesActionParameters
 		var deltaGold = times * _goldReward;
 		var deltaMats = times * _materialsReward;
 		var deltaAp = startingAp - character.CurrentAp;
+		var deltaContribution = times * _siegeContribution;
 
-		character.AddReward(0, deltaGold, deltaMats);
+		character.AddReward(0, deltaGold, deltaMats, deltaContribution);
 
 		var sb = new StringBuilder($"Your hard work at the **_{_name}_** was paid off:");
 
@@ -68,6 +72,11 @@ public partial class ActionLaborInstance : ActionBase<int, TimesActionParameters
 		if (deltaMats > 0)
 		{
 			sb.Append($" `+{deltaMats} Materials`");
+		}
+
+		if (deltaContribution > 0)
+		{
+			sb.Append($" `+{deltaContribution} Siege Contribution`");
 		}
 
 		sb.Append($" `-{deltaAp} AP`");

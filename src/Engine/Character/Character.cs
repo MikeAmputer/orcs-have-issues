@@ -98,11 +98,12 @@ public class Character : Fighter
 
 	public bool CanLevelUpHp => LevelUps.Count(selection => selection == LevelUpSelection.Hp) < MaxHpLevelUps;
 
-	public void AddReward(int exp, int gold, int materials)
+	public void AddReward(int exp, int gold, int materials, int siegeContribution = 0)
 	{
 		LevelInfo.AddExp(exp);
 		Gold += gold;
 		Materials += materials;
+		SiegeContributionPoints += siegeContribution;
 	}
 
 	public void SpendAp(int ap)
