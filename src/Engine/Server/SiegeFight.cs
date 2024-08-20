@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Microsoft.Extensions.Primitives;
 
 namespace Engine;
 
@@ -42,6 +43,7 @@ public class SiegeFight
 
 		var orderByLevel = true;
 
+		Race winner;
 		while (true)
 		{
 			Func<Fighter, int> orderKeySelector = orderByLevel
@@ -62,12 +64,14 @@ public class SiegeFight
 
 			if (orcs.Count == 0)
 			{
-				return Race.Human;
+				winner = Race.Human;
+				break;
 			}
 
 			if (humans.Count == 0)
 			{
-				return Race.Orc;
+				winner = Race.Orc;
+				break;
 			}
 
 			foreach (var fight in BatchFights(GetNextAttacker(currentHolder), orcs, humans))
@@ -75,14 +79,18 @@ public class SiegeFight
 				fight.Simulate();
 			}
 		}
+
+		LogPlayers();
+
+		return winner;
 	}
 
 	private const int MaxFightBatchSize = 5;
 
 	private IEnumerable<Fight> BatchFights(
 		Race firstAttacker,
-		List<Fighter> orcs,
-		List<Fighter> humans)
+		IReadOnlyCollection<Fighter> orcs,
+		IReadOnlyCollection<Fighter> humans)
 	{
 		var fightersLeft = Math.Min(orcs.Count, humans.Count);
 		var fightersTaken = 0;
@@ -164,5 +172,29 @@ public class SiegeFight
 				yield return tuple.humans();
 			}
 		}
+	}
+
+	private void LogPlayers()
+	{
+		Participants
+			.SelectMany(kvp => kvp.Value)
+			.ToList()
+			.ForEach(LogPlayer);
+	}
+
+	private void LogPlayer(Character character)
+	{
+		var tracker = character.StopBattleTracker();
+
+		var log = character.Logs;
+		log.AppendLine();
+		log.AppendLine("**_Siege summary:_**");
+		log.AppendLine($"- Contributions points: {character.SiegeContributionPoints}");
+		log.AppendLine($"- Kills: {tracker.Kills}");
+		log.AppendLine($"- EXP earned: {tracker.ExpEarned}");
+		log.AppendLine($"- Damage dealt: {tracker.DamageDealt}");
+		log.AppendLine($"- Damage taken: {tracker.DamageTaken}");
+		log.AppendLine($"- Damage mitigated: {tracker.DamageMitigated}");
+		log.AppendLine();
 	}
 }

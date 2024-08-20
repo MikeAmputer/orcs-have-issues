@@ -92,7 +92,7 @@ public class Fight
 		var source = _fighters[sourceId];
 		var target = _fighters[targetId];
 
-		target.TakeDamage(source.Damage);
+		target.TakeDamage(source);
 
 		if (target.CanFight)
 		{

@@ -150,6 +150,7 @@ public class Character : Fighter
 	public int PrepareForSiege()
 	{
 		CurrentHp = Math.Min(MaxHp, CurrentHp + 30);
+		StartBattleTracker();
 
 		return SiegeContributionPoints;
 	}

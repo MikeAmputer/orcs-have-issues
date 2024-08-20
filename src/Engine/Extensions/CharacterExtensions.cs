@@ -10,13 +10,15 @@ public static class CharacterExtensions
 
 		var dto = CharacterDto.FromCharacter(character);
 
-		var state = new StringBuilder($"Level {character.LevelInfo.Level}, {dto.Race}");
+		var state = new StringBuilder();
+
+		state.AppendLine($"**_Level {character.LevelInfo.Level}, {dto.Race}_**");
+
 		if (character.IsLevelUpAvailable)
 		{
-			state.Append(" `Level-up available`");
+			state.AppendLine(" `Level-up available`");
 		}
 
-		state.AppendLine();
 		state.AppendLine($"Exp until next level: {character.LevelInfo.UntilNextLevel} (total: {dto.Exp})");
 		state.AppendLine(
 			$"Battle stats: `HP: {character.MaxHp}` `ATK: {character.Attack}` `DEF: {character.Defence}`");
