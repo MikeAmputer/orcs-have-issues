@@ -98,6 +98,7 @@ if (!options.TestMode)
 			new NewIssue("Server State")
 			{
 				Body = stateIssueBody,
+				Labels = { "server" },
 			});
 
 		Logging.LogInfo($"New server state issue created #{issue.Number}");

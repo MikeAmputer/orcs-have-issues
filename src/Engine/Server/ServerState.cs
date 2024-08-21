@@ -172,10 +172,6 @@ public class ServerState
 		{ FortressId.West, new() },
 	};
 
-	private static readonly Regex ServerStateIssueRegex = new(
-		"^server state",
-		RegexOptions.IgnoreCase | RegexOptions.Compiled);
-
 	private async Task<Issue?> LoadServerStateIssue(IIssuesClient issuesClient, Repository repository)
 	{
 		Logging.LogInfo("Requesting server state issue");
@@ -185,6 +181,7 @@ public class ServerState
 			new RepositoryIssueRequest
 			{
 				Filter = IssueFilter.Created,
+				Labels = { "server" },
 				State = ItemStateFilter.Open,
 				SortProperty = IssueSort.Updated,
 				SortDirection = SortDirection.Descending,
@@ -193,23 +190,15 @@ public class ServerState
 		Logging.LogInfo("Issues retrieved");
 		Logging.LogGitHubClientState();
 
-		if (issues.Count != 0)
+		if (issues.Count == 0)
 		{
-			foreach (var issue in issues)
-			{
-				if (!ServerStateIssueRegex.IsMatch(issue.Title))
-				{
-					continue;
-				}
+			Logging.LogInfo("Server state issue not found");
 
-				Logging.LogInfo($"Server state issue #{issue.Number}");
-
-				return issue;
-			}
+			return null;
 		}
 
-		Logging.LogInfo($"Server state issue not found");
+		Logging.LogInfo($"Found {issues.Count} server state issues");
 
-		return null;
+		return issues[0];
 	}
 }
