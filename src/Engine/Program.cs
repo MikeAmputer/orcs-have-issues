@@ -87,7 +87,6 @@ if (!options.TestMode)
 			ServerState.Instance.IssueNumber!.Value,
 			new IssueUpdate
 			{
-				Title = "Server State",
 				Body = stateIssueBody,
 			});
 	}
