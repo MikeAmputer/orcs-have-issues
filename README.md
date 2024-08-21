@@ -1,2 +1,2 @@
 # orcs-have-issues
-A multiplayer game with a github issues frontend and datastore
+A multiplayer RPG game with a github-issues-based UI and backend
