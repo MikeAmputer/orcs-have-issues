@@ -15,6 +15,8 @@ public class CharacterDto
 
 	public LevelUpSelection[] LevelUps { get; set; } = [];
 
+	public CharacterStatistics Statistics { get; set; } = new();
+
 	public static CharacterDto FromCharacter(Character character)
 	{
 		return new()
@@ -25,6 +27,7 @@ public class CharacterDto
 			ArmorRank = character.ArmorRank,
 			WeaponRank = character.WeaponRank,
 			LevelUps = character.LevelUps.ToArray(),
+			Statistics = character.Statistics,
 		};
 	}
 

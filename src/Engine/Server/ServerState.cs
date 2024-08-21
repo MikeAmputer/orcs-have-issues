@@ -17,6 +17,8 @@ public class ServerState
 
 	public int? IssueNumber => _stateIssueNumber;
 
+	public ServerStatistics Statistics { get; private set; } = null!;
+
 	public StringBuilder Logs { get; } = new();
 
 	public int MaterialsPriceFor(Race race) =>
@@ -105,17 +107,8 @@ public class ServerState
 				.ToDictionary(
 					entry => entry.Login,
 					entry => (entry.IssueNumber, entry.Exp)));
-	}
 
-	public void UpdateLeaderboard(IEnumerable<Character> characters)
-	{
-		foreach (var character in characters)
-		{
-			_leaderboard.AddOrUpdate(
-				character.PlayerInfo.UserLogin,
-				(character.PlayerInfo.IssueNumber, character.LevelInfo.Exp),
-				(_, _) => (character.PlayerInfo.IssueNumber, character.LevelInfo.Exp));
-		}
+		Statistics = dto.Statistics;
 	}
 
 	public IEnumerable<LeaderboardEntryDto> GetLeaderboard(int length)
@@ -130,7 +123,24 @@ public class ServerState
 			.Take(length);
 	}
 
+	public void PrepareForSave(IEnumerable<Character> characters)
+	{
+		UpdateLeaderboard(characters);
+		Statistics.CyclesSimulated++;
+	}
+
 	private ConcurrentDictionary<string, (int IssueNumber, int Exp)> _leaderboard = new();
+
+	private void UpdateLeaderboard(IEnumerable<Character> characters)
+	{
+		foreach (var character in characters)
+		{
+			_leaderboard.AddOrUpdate(
+				character.PlayerInfo.UserLogin,
+				(character.PlayerInfo.IssueNumber, character.LevelInfo.Exp),
+				(_, _) => (character.PlayerInfo.IssueNumber, character.LevelInfo.Exp));
+		}
+	}
 
 	private void ApplySiegeWinners(Dictionary<FortressId, Race> winners)
 	{

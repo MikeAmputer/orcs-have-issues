@@ -35,6 +35,8 @@ public class Character : Fighter
 
 	public StringBuilder Logs { get; } = new();
 
+	public CharacterStatistics Statistics { get; private set; } = null!;
+
 	public Character(PlayerInfo playerInfo, CharacterDto dto, DateTimeOffset? utcNow = null)
 	{
 		if (utcNow != null)
@@ -43,6 +45,7 @@ public class Character : Fighter
 		}
 
 		PlayerInfo = playerInfo;
+		Statistics = dto.Statistics;
 
 		Race = playerInfo.IssueLabels.Contains(Race.Orc.ToString().ToLower())
 			? Race.Orc
@@ -56,7 +59,7 @@ public class Character : Fighter
 		Gold = dto.Gold;
 		Materials = dto.Materials;
 
-		foreach (var levelUp in dto.LevelUps)
+		foreach (var levelUp in dto.LevelUps.Take(LevelInfo.Level))
 		{
 			ApplyLevelUpSelection(levelUp);
 		}
@@ -163,6 +166,7 @@ public class Character : Fighter
 	{
 		DisableFortressBuff();
 		_fortressBuff = ServerState.Instance.GetFortressBuffFor(Race);
+		Statistics.CyclesPlayed++;
 	}
 
 	public override void ScoreFrag(Fighter target)
