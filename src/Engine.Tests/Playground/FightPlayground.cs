@@ -7,13 +7,20 @@ public class FightPlayground
 	[TestMethod]
 	public void Player_Vs_Monsters()
 	{
-		var player = new TestCharacter(100, 2, 1, 0, 0);
-		//Fighter[] monsters = [Monster.SpiderGuardian, Monster.SpiderGuardian, Monster.SpiderScout, Monster.SpiderAmbusher];
-		Fighter[] monsters = [Monster.Goblin, Monster.GoblinSoldier];
+		var player = new TestCharacter(100, 4, 3, 0, 1);
+		var monsters = ActionFightInstance.GoblinCampElite.CreateEnemies;
+		//Fighter[] monsters = [Monster.BanditEnforcer, Monster.BanditEnforcer, Monster.BanditEnforcer];
 
+		player.StartBattleTracker();
 		new Fight([player], monsters).Simulate();
+		var tracker = player.StopBattleTracker();
 
-		Logging.LogInfo($"HP: {player.CurrentHp} | EXP: {player.LevelInfo.Exp}");
+		Logging.LogInfo($"Damage Dealt: {tracker.DamageDealt}");
+		Logging.LogInfo($"Damage Taken: {tracker.DamageTaken}");
+		Logging.LogInfo($"Damage Mitigated: {tracker.DamageMitigated}");
+		Logging.LogInfo($"Health Lost: {tracker.HealthDelta}");
+		Logging.LogInfo($"Exp Earned: {tracker.ExpEarned}");
+		Logging.LogInfo($"Kills: {tracker.Kills}");
 	}
 
 	[TestMethod]
