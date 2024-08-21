@@ -224,9 +224,9 @@ public class Character : Fighter
 	{
 		var reactions = PlayerInfo.IssueReactions > 100 ? 100 : PlayerInfo.IssueReactions;
 
-		MaxHp += Math.Min(reactions, 20);
-		Attack += reactions / 20;
-		Defence += (reactions + 10) / 20;
+		MaxHp += Math.Min(reactions, 20) + 2 * (reactions / 10);
+		Attack += reactions / 30;
+		Defence += (reactions + 10) / 30;
 		MaxAp += reactions / 50;
 	}
 

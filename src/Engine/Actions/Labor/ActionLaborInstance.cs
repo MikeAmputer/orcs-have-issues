@@ -9,6 +9,7 @@ public partial class ActionLaborInstance : ActionBase<int, TimesActionParameters
 	private readonly int _requiredLevel;
 	private readonly int _actionPointsCost;
 	private readonly int _goldReward;
+	private readonly int _goldPerLevel;
 	private readonly int _materialsReward;
 	private readonly int _siegeContribution;
 
@@ -17,6 +18,7 @@ public partial class ActionLaborInstance : ActionBase<int, TimesActionParameters
 		int requiredLevel,
 		int actionPointsCost,
 		int goldReward,
+		int goldPerLevel,
 		int materialsReward,
 		int siegeContribution)
 	{
@@ -24,6 +26,7 @@ public partial class ActionLaborInstance : ActionBase<int, TimesActionParameters
 		_requiredLevel = requiredLevel;
 		_actionPointsCost = actionPointsCost;
 		_goldReward = goldReward;
+		_goldPerLevel = goldPerLevel;
 		_materialsReward = materialsReward;
 		_siegeContribution = siegeContribution;
 	}
@@ -55,7 +58,7 @@ public partial class ActionLaborInstance : ActionBase<int, TimesActionParameters
 
 	private string ProcessResults(Character character, int times, int startingAp)
 	{
-		var deltaGold = times * _goldReward;
+		var deltaGold = times * (_goldReward + _goldPerLevel * character.Level);
 		var deltaMats = times * _materialsReward;
 		var deltaAp = startingAp - character.CurrentAp;
 		var deltaContribution = times * _siegeContribution;
