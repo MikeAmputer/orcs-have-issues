@@ -11,29 +11,16 @@ public class ActionLevelUp : ActionBase<LevelUpSelection, EnumActionParametersPr
 		parameters switch
 		{
 			LevelUpSelection.None => ActionReport.Empty,
-			LevelUpSelection.Hp => LevelUpHp(character),
-			LevelUpSelection.Atk => LevelUpPlusOne(LevelUpSelection.Atk, character),
-			LevelUpSelection.Def => LevelUpPlusOne(LevelUpSelection.Def, character),
+			LevelUpSelection.Hp => LevelUp(LevelUpSelection.Hp, character),
+			LevelUpSelection.Atk => LevelUp(LevelUpSelection.Atk, character),
+			LevelUpSelection.Def => LevelUp(LevelUpSelection.Def, character),
 			_ => throw new ArgumentOutOfRangeException(nameof(parameters), parameters, null)
 		};
 
-	private ActionReport LevelUpHp(Character character)
+	private ActionReport LevelUp(LevelUpSelection selection, Character character)
 	{
-		if (!character.CanLevelUpHp)
-		{
-			return ActionReport.FromMessage(
-				$"Unable to level-up HP value, max value (${Character.MaxHpLevelUps}) is reached");
-		}
-
-		var oldHp = character.MaxHp;
-		character.ApplyLevelUpSelection(LevelUpSelection.Hp);
-		return ActionReport.FromMessage(ComposeLogMessage(LevelUpSelection.Hp, character.MaxHp - oldHp));
-	}
-
-	private ActionReport LevelUpPlusOne(LevelUpSelection selection, Character character)
-	{
-		character.ApplyLevelUpSelection(selection);
-		return ActionReport.FromMessage(ComposeLogMessage(selection, 1));
+		var delta = character.ApplyLevelUpSelection(selection);
+		return ActionReport.FromMessage(ComposeLogMessage(selection, delta));
 	}
 
 	private string ComposeLogMessage(LevelUpSelection selection, int delta)

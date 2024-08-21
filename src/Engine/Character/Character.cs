@@ -4,11 +4,9 @@ namespace Engine;
 
 public class Character : Fighter
 {
-	public const int MaxHpLevelUps = 10;
-
 	public PlayerInfo PlayerInfo { get; }
 
-	public Race Race { get; private set; } = Race.None;
+	public Race Race { get; private set; }
 
 	public CharacterLevelInfo LevelInfo { get; }
 	public override int Level => LevelInfo.Level;
@@ -31,11 +29,11 @@ public class Character : Fighter
 
 	public bool IsSiegeParticipant { get; private set; }
 
-	public int SiegeContributionPoints { get; private set; } = 0;
+	public int SiegeContributionPoints { get; private set; }
 
 	public StringBuilder Logs { get; } = new();
 
-	public CharacterStatistics Statistics { get; private set; } = null!;
+	public CharacterStatistics Statistics { get; }
 
 	public Character(PlayerInfo playerInfo, CharacterDto dto, DateTimeOffset? utcNow = null)
 	{
@@ -76,8 +74,6 @@ public class Character : Fighter
 
 	public bool IsLevelUpAvailable => LevelInfo.Level > LevelUps.Count;
 
-	public bool CanLevelUpHp => LevelUps.Count(selection => selection == LevelUpSelection.Hp) < MaxHpLevelUps;
-
 	public void AddReward(int exp, int gold, int materials, int siegeContribution = 0)
 	{
 		LevelInfo.AddExp(exp);
@@ -91,38 +87,33 @@ public class Character : Fighter
 		CurrentAp -= ap;
 	}
 
-	private int _lvlUpHp = 0;
-
-	public void ApplyLevelUpSelection(LevelUpSelection levelUp)
+	public int ApplyLevelUpSelection(LevelUpSelection levelUp)
 	{
-		switch (levelUp)
+		if (levelUp == LevelUpSelection.None)
 		{
-			case LevelUpSelection.None:
-				break;
-			case LevelUpSelection.Hp:
-				_lvlUpHp++;
-				if (_lvlUpHp <= MaxHpLevelUps)
-				{
-					var delta = MaxHpLevelUps + 1 - _lvlUpHp;
-					MaxHp += delta;
-					CurrentHp += delta;
-					;
-				}
-
-				break;
-			case LevelUpSelection.Atk:
-				Attack += 1;
-
-				break;
-			case LevelUpSelection.Def:
-				Defence += 1;
-
-				break;
-			default:
-				throw new ArgumentOutOfRangeException();
+			return 0;
 		}
 
 		LevelUps.Add(levelUp);
+
+		switch (levelUp)
+		{
+			case LevelUpSelection.Hp:
+				MaxHp += 10;
+				CurrentHp += 10;
+
+				return 10;
+			case LevelUpSelection.Atk:
+				Attack += 1;
+
+				return 1;
+			case LevelUpSelection.Def:
+				Defence += 1;
+
+				return 1;
+			default:
+				throw new ArgumentOutOfRangeException(nameof(levelUp), levelUp, null);
+		}
 	}
 
 	public void MarkSiegeParticipant() => IsSiegeParticipant = true;

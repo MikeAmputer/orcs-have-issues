@@ -2,7 +2,7 @@
 
 public class ActionReport
 {
-	public static ActionReport Empty => new ActionReport();
+	public static ActionReport Empty => new();
 
 	public static ActionReport FromMessage(string message) => new()
 	{
@@ -10,6 +10,6 @@ public class ActionReport
 		LogMessage = message,
 	};
 
-	public bool IsExecuted { get; init; } = false;
-	public string LogMessage { get; init; } = string.Empty;
+	public bool IsExecuted { get; private init; } = false;
+	public string LogMessage { get; private init; } = string.Empty;
 }
