@@ -59,14 +59,11 @@ public class SiegeFightTests
 
 	private IEnumerable<Character> CreateCharacters(int count, Race race)
 	{
-		var dto = new CharacterDto
-		{
-			Race = race,
-		};
-
 		for (var i = 0; i < count; i++)
 		{
-			yield return new Character(new PlayerInfo(), dto);
+			yield return new Character(
+				new PlayerInfo { IssueLabels = [race.ToString().ToLower()] },
+				new CharacterDto());
 		}
 	}
 }

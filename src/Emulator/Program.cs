@@ -5,6 +5,7 @@ var playerInfo = new PlayerInfo
 {
 	IssueReactions = 2,
 	IsStargazer = true,
+	IssueLabels = [Race.Orc.ToString().ToLower()]
 };
 
 var dto = new CharacterDto

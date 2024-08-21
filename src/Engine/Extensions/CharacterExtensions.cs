@@ -12,7 +12,7 @@ public static class CharacterExtensions
 
 		var state = new StringBuilder();
 
-		state.AppendLine($"**_Level {character.LevelInfo.Level}, {dto.Race}_**");
+		state.AppendLine($"**_Level {character.LevelInfo.Level}, {character.Race}_**");
 
 		if (character.IsLevelUpAvailable)
 		{

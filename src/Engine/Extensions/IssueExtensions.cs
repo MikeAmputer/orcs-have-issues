@@ -41,6 +41,7 @@ public static class IssueExtensions
 			StateCommentId = stateCommentId,
 			IssueReactions = issue.Reactions.Heart,
 			IsStargazer = isStargazer,
+			IssueLabels = issue.Labels.Select(label => label.Name).ToHashSet(),
 		};
 	}
 

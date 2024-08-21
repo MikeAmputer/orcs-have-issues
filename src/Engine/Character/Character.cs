@@ -44,7 +44,13 @@ public class Character : Fighter
 
 		PlayerInfo = playerInfo;
 
-		SelectRace(dto.Race);
+		Race = playerInfo.IssueLabels.Contains(Race.Orc.ToString().ToLower())
+			? Race.Orc
+			: playerInfo.IssueLabels.Contains(Race.Human.ToString().ToLower())
+				? Race.Human
+				: Race.None;
+
+		ApplyRaceBonuses();
 
 		LevelInfo = new CharacterLevelInfo(dto.Exp);
 		Gold = dto.Gold;
@@ -63,35 +69,6 @@ public class Character : Fighter
 
 		CurrentHp = MaxHp;
 		CurrentAp = MaxAp;
-	}
-
-	public void SelectRace(Race race)
-	{
-		if (Race != Race.None)
-		{
-			return;
-		}
-
-		Race = race;
-		_fortressBuff = ServerState.Instance.GetFortressBuffFor(Race);
-
-		switch (Race)
-		{
-			case Race.None:
-				return;
-			case Race.Human:
-				Defence++;
-
-				break;
-			case Race.Orc:
-				Attack++;
-
-				break;
-			default:
-				throw new ArgumentOutOfRangeException();
-		}
-
-		EnableFortressBuff();
 	}
 
 	public bool IsLevelUpAvailable => LevelInfo.Level > LevelUps.Count;
@@ -211,6 +188,29 @@ public class Character : Fighter
 		applyAction(this);
 
 		return true;
+	}
+
+	private void ApplyRaceBonuses()
+	{
+		_fortressBuff = ServerState.Instance.GetFortressBuffFor(Race);
+
+		switch (Race)
+		{
+			case Race.None:
+				return;
+			case Race.Human:
+				Defence++;
+
+				break;
+			case Race.Orc:
+				Attack++;
+
+				break;
+			default:
+				throw new ArgumentOutOfRangeException();
+		}
+
+		EnableFortressBuff();
 	}
 
 	private void ApplyArmorRanks(int increment)

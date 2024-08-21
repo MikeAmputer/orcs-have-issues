@@ -4,7 +4,6 @@ public sealed class ActionRunner : SubAction
 {
 	protected override Dictionary<string, IAction> SubCommands => new()
 	{
-		{ "select-race", new ActionRaceSelection() },
 		{ "level-up", new ActionLevelUp() },
 		{ "fight", new ActionFight() },
 		{ "labor", new ActionLabor() },

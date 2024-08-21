@@ -68,11 +68,11 @@ public class ServerState
 			}
 			else if (fortress.Holder == Race.None)
 			{
-				Logs.AppendLine($"`{fortress.Name} still belongs to nobody");
+				Logs.AppendLine($"{fortress.Name} still belongs to nobody");
 			}
 			else
 			{
-				Logs.AppendLine($"`{fortress.Name} still belongs to {fortress.Holder}s");
+				Logs.AppendLine($"{fortress.Name} still belongs to {fortress.Holder}s");
 			}
 		}
 

@@ -6,8 +6,6 @@ namespace Engine;
 [Serializable]
 public class CharacterDto
 {
-	public Race Race { get; set; } = Race.None;
-
 	public int Exp { get; set; } = 0;
 	public int Gold { get; set; } = 0;
 	public int Materials { get; set; } = 0;
@@ -21,7 +19,6 @@ public class CharacterDto
 	{
 		return new()
 		{
-			Race = character.Race,
 			Exp = character.LevelInfo.Exp,
 			Gold = character.Gold,
 			Materials = character.Materials,

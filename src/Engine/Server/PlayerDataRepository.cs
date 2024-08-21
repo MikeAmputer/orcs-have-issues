@@ -5,10 +5,6 @@ namespace Engine;
 
 public class PlayerDataRepository
 {
-	private static readonly Regex CharacterIssueRegex = new(
-		"^character",
-		RegexOptions.IgnoreCase | RegexOptions.Compiled);
-
 	private static readonly Regex CommentIssueNumberRegex = new(@"/issues/(\d+)", RegexOptions.Compiled);
 
 	private static readonly ApiOptions BatchPagination = new()
@@ -21,6 +17,7 @@ public class PlayerDataRepository
 
 	private readonly Repository _gitHubRepository;
 	private readonly Dictionary<int, Issue> _issues = new();
+	private readonly HashSet<long> _players = new();
 	private readonly Dictionary<int, IssueComment?> _characterStates = new();
 	private readonly Dictionary<int, IssueComment> _characterActions = new();
 	private HashSet<long> _stargazers = null!;
@@ -81,6 +78,7 @@ public class PlayerDataRepository
 			new RepositoryIssueRequest
 			{
 				Filter = IssueFilter.All,
+				Labels = { "character" },
 				State = ItemStateFilter.Open,
 				SortProperty = IssueSort.Updated,
 				SortDirection = SortDirection.Descending,
@@ -98,12 +96,15 @@ public class PlayerDataRepository
 
 		foreach (var issue in issues)
 		{
-			if (issue.Comments == 0 || !CharacterIssueRegex.IsMatch(issue.Title))
+			if (issue.Comments == 0 || _players.Contains(issue.User.Id))
 			{
 				continue;
 			}
 
-			_issues.TryAdd(issue.Number, issue);
+			if (_issues.TryAdd(issue.Number, issue))
+			{
+				_players.Add(issue.User.Id);
+			}
 		}
 
 		return true;
