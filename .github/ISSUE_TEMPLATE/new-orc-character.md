@@ -1,5 +1,5 @@
 ---
-name: Character Orc
+name: New Orc Character
 about: Use this template to create a new orc character
 title: ''
 labels: character, orc

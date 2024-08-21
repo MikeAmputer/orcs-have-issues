@@ -1,5 +1,5 @@
 ---
-name: Character Human
+name: New Human Character
 about: Use this template to create a new human character
 title: ''
 labels: character, human
