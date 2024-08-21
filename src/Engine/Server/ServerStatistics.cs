@@ -3,5 +3,5 @@
 [Serializable]
 public class ServerStatistics
 {
-	public int CyclesSimulated { get; set; } = 0;
+	public int CyclesSimulated { get; set; }
 }

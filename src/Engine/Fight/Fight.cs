@@ -11,8 +11,8 @@ public class Fight
 	private int _attackersAlive;
 	private int _defendersAlive;
 
-	private int lastAttackedAttacker = -1;
-	private int lastAttackedDefender = -1;
+	private int _lastAttackedAttacker = -1;
+	private int _lastAttackedDefender = -1;
 
 	public Fight(Fighter[] attackers, Fighter[] defenders)
 	{
@@ -67,13 +67,13 @@ public class Fight
 
 			if (_aliveAttackers.Contains(fighterId))
 			{
-				lastAttackedDefender = GetTargetId(_aliveDefenders, lastAttackedDefender);
-				fightFinished = SimulateHit(fighterId, lastAttackedDefender, false);
+				_lastAttackedDefender = GetTargetId(_aliveDefenders, _lastAttackedDefender);
+				fightFinished = SimulateHit(fighterId, _lastAttackedDefender, false);
 			}
 			if (_aliveDefenders.Contains(fighterId))
 			{
-				lastAttackedAttacker = GetTargetId(_aliveAttackers, lastAttackedAttacker);
-				fightFinished = SimulateHit(fighterId, lastAttackedAttacker, true);
+				_lastAttackedAttacker = GetTargetId(_aliveAttackers, _lastAttackedAttacker);
+				fightFinished = SimulateHit(fighterId, _lastAttackedAttacker, true);
 			}
 
 			if (fightFinished)

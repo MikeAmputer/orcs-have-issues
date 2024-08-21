@@ -10,7 +10,7 @@ public class QuantityActionParametersProvider : ActionParametersProvider<int>
 			return false;
 		}
 
-		typedParameters = parameters.Length == 0 ? 1 : parameters[0].TryConvertToInt32(0);
+		typedParameters = parameters.Length == 0 ? 1 : parameters[0].TryConvertToInt32();
 
 		return typedParameters > 0;
 	}

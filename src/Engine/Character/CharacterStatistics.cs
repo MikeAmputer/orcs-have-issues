@@ -3,5 +3,5 @@
 [Serializable]
 public class CharacterStatistics
 {
-	public int CyclesPlayed { get; set; } = 0;
+	public int CyclesPlayed { get; set; }
 }

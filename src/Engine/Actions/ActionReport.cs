@@ -10,6 +10,6 @@ public class ActionReport
 		LogMessage = message,
 	};
 
-	public bool IsExecuted { get; private init; } = false;
+	public bool IsExecuted { get; private init; }
 	public string LogMessage { get; private init; } = string.Empty;
 }

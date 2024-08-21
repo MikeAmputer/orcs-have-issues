@@ -6,11 +6,11 @@ public abstract class Fighter
 
 	public virtual int Level => 0;
 
-	public int Attack { get; protected set; } = 0;
-	public int Defence { get; protected set; } = 0;
+	public int Attack { get; protected set; }
+	public int Defence { get; protected set; }
 
-	public int ArmorRank { get; protected set; } = 0;
-	public int WeaponRank { get; protected set; } = 0;
+	public int ArmorRank { get; protected set; }
+	public int WeaponRank { get; protected set; }
 
 	public int CurrentHp { get; protected set; }
 

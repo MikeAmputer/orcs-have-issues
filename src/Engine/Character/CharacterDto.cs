@@ -6,12 +6,12 @@ namespace Engine;
 [Serializable]
 public class CharacterDto
 {
-	public int Exp { get; set; } = 0;
-	public int Gold { get; set; } = 0;
-	public int Materials { get; set; } = 0;
+	public int Exp { get; set; }
+	public int Gold { get; set; }
+	public int Materials { get; set; }
 
-	public int ArmorRank { get; set; } = 0;
-	public int WeaponRank { get; set; } = 0;
+	public int ArmorRank { get; set; }
+	public int WeaponRank { get; set; }
 
 	public LevelUpSelection[] LevelUps { get; set; } = [];
 

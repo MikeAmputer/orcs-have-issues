@@ -2,9 +2,9 @@
 
 public class CharacterLevelInfo
 {
-	public int Level { get; private set; } = 0;
-	public int Exp { get; private set; } = 0;
-	public int CurrentLevelExp { get; private set; } = 0;
+	public int Level { get; private set; }
+	public int Exp { get; private set; }
+	public int CurrentLevelExp { get; private set; }
 
 	public int UntilNextLevel => ExpRequirements[Level + 1] - CurrentLevelExp;
 
