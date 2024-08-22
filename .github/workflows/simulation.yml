@@ -15,7 +15,7 @@ jobs:
       run: dotnet test src/Engine.Tests/Engine.Tests.csproj --logger trx --results-directory "TestResults"
 
     - name: Run Simulation
-      run: dotnet run src/Engine/Engine.csproj --configuration Release -- --token ${{ secrets.GITHUB_TOKEN }} --period-hours 24 --test-mode true
+      run: dotnet run --project src/Engine/Engine.csproj --configuration Release -- --token ${{ secrets.REPOSITORY_TOKEN }} --period-hours 24 --test-mode true
 
     - name: Upload Test Results
       uses: actions/upload-artifact@v4
