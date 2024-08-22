@@ -6,11 +6,7 @@ namespace Engine;
 
 public static class IssueExtensions
 {
-	private const string DtoRegexPattern = @"
-```json
-(.+)
-```
-";
+	private const string DtoRegexPattern = @"```json\r?\n(.+)\r?\n```";
 
 	private static readonly Regex DtoRegex = new(DtoRegexPattern, RegexOptions.Compiled);
 
