@@ -15,6 +15,8 @@ public class ServerState
 	public Dictionary<FortressId, Race> FortressHolders =>
 		_fortresses.ToDictionary(f => f.Id, f => f.Holder);
 
+	public IReadOnlyList<Fortress> Fortresses => _fortresses;
+
 	public int? IssueNumber => _stateIssueNumber;
 
 	public ServerStatistics Statistics { get; private set; } = null!;

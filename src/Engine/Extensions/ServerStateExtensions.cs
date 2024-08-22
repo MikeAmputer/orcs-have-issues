@@ -16,9 +16,16 @@ public static class ServerStateExtensions
 			leaderboard.AppendLine($"1. [{entry.Login}]({entry.IssueNumber}) - `{entry.Exp} EXP`");
 		}
 
+		var fortresses = new StringBuilder();
+		foreach (var fortress in state.Fortresses.OrderBy(f => f.Id))
+		{
+			fortresses.AppendLine($"1. {fortress.ToString()}");
+		}
+
 		var args = new object[]
 		{
 			leaderboard.ToString(),
+			fortresses.ToString(),
 			logs,
 			dto.ToString(),
 		};
@@ -29,14 +36,22 @@ public static class ServerStateExtensions
 	private const string StateBodyTemplate = @"
 ### Leaderboard
 {0}
-### Logs
+### Fortresses
 {1}
 ___
+<details><summary>Logs</summary>
+<p>
+
+{2}
+
+</p>
+</details>
+
 <details><summary>DTO</summary>
 <p>
 
 ```json
-{2}
+{3}
 ```
 
 </p>
