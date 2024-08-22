@@ -1,0 +1,31 @@
+name: Cycle Simulation
+
+on:
+  workflow_dispatch:
+
+jobs:
+  simulate:
+    name: Simulation
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Run Unit Tests
+      run: dotnet test src/Engine.Tests/Engine.Tests.csproj --logger trx --results-directory "TestResults"
+
+    - name: Run Simulation
+      run: dotnet run src/Engine/Engine.csproj --configuration Release -- --token ${{ secrets.GITHUB_TOKEN }} --period-hours 24 --test-mode true
+
+    - name: Upload Test Results
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: TestResults
+      if: ${{ always() }}
+
+    - name: Upload Characters Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: characters
+        path: src/Engine/bin/Release/net8.0/artifacts/characters.txt
