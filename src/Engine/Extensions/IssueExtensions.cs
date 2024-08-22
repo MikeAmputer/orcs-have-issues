@@ -12,7 +12,9 @@ public static class IssueExtensions
 ```
 ";
 
-	private static readonly Regex DtoRegex = new(DtoRegexPattern, RegexOptions.Compiled);
+	private static readonly string DtoRegexPatternNormalized = DtoRegexPattern.ReplaceLineEndings();
+
+	private static readonly Regex DtoRegex = new(DtoRegexPatternNormalized, RegexOptions.Compiled);
 
 	public static CharacterDto ToCharacterDto(this IssueComment? comment)
 	{
