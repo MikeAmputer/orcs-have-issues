@@ -120,7 +120,8 @@ public class Character : Fighter
 
 	public int PrepareForSiege()
 	{
-		CurrentHp = Math.Min(MaxHp, CurrentHp + 30);
+		var hpLvlUps = LevelUps.Count(l => l == LevelUpSelection.Hp);
+		CurrentHp = Math.Min(MaxHp, CurrentHp + MaxHp / 5 + hpLvlUps * 4);
 		StartBattleTracker();
 
 		return SiegeContributionPoints;
