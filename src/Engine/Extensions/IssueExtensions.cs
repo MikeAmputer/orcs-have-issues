@@ -6,35 +6,23 @@ namespace Engine;
 
 public static class IssueExtensions
 {
-	private const string DtoRegexPattern = @"
-```json
-(.+)
-```
-";
+	private const string DtoRegexPattern = @"```json\r?\n(.+)\r?\n```";
 
-	private static readonly string DtoRegexPatternNormalized = DtoRegexPattern.ReplaceLineEndings();
-
-	private static readonly Regex DtoRegex = new(DtoRegexPatternNormalized, RegexOptions.Compiled);
+	private static readonly Regex DtoRegex = new(DtoRegexPattern, RegexOptions.Compiled);
 
 	public static CharacterDto ToCharacterDto(this IssueComment? comment)
 	{
 		if (comment == null)
 		{
-			Logging.LogInfo("Comment is null");
 			return new();
 		}
-
-		Logging.LogInfo(comment.Body);
 
 		var jsonString = DtoRegex.Match(comment.Body).TryGetGroupValue(1);
 
 		if (jsonString.IsNullOrWhiteSpace())
 		{
-			Logging.LogInfo("json is null");
 			return new();
 		}
-
-		Logging.LogInfo(jsonString);
 
 		return JsonSerializer.Deserialize<CharacterDto>(jsonString)
 			?? throw new InvalidOperationException($"Unable to deserialize character DTO: {comment.HtmlUrl}.");
