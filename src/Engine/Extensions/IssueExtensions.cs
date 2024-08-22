@@ -20,15 +20,21 @@ public static class IssueExtensions
 	{
 		if (comment == null)
 		{
+			Logging.LogInfo("Comment is null");
 			return new();
 		}
+
+		Logging.LogInfo(comment.Body);
 
 		var jsonString = DtoRegex.Match(comment.Body).TryGetGroupValue(1);
 
 		if (jsonString.IsNullOrWhiteSpace())
 		{
+			Logging.LogInfo("json is null");
 			return new();
 		}
+
+		Logging.LogInfo(jsonString);
 
 		return JsonSerializer.Deserialize<CharacterDto>(jsonString)
 			?? throw new InvalidOperationException($"Unable to deserialize character DTO: {comment.HtmlUrl}.");
