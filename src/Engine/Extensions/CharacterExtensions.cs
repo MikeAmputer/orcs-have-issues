@@ -32,6 +32,12 @@ public static class CharacterExtensions
 			state.AppendLine(fortressBuffs);
 		}
 
+		var serverNumber = ServerState.Instance.IssueNumber;
+		if (serverNumber != null)
+		{
+			state.AppendLine($"[Server #{serverNumber}]({serverNumber})");
+		}
+
 		var args = new object[]
 		{
 			state.ToString(),
