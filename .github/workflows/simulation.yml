@@ -28,4 +28,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: characters
-        path: src/Engine/bin/Release/net8.0/artifacts/characters.txt
+        path: artifacts/characters.txt
