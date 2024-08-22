@@ -1,0 +1,21 @@
+name: Cycle Simulation (Test)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  simulate:
+    name: Simulation
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Run Simulation
+      run: dotnet run --project src/Engine/Engine.csproj --configuration Release -- --token ${{ secrets.REPOSITORY_TOKEN }} --period-hours 24 --test-mode true
+
+    - name: Upload Characters Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: characters
+        path: artifacts/characters.txt
