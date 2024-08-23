@@ -54,7 +54,7 @@ foreach (var (character, _) in characters)
 
 	var stateBody = character.ToStateCommentBody();
 
-	if (options.TestMode)
+	if (options.TestMode.GetValueOrDefault(true))
 	{
 		Logging.LogInfo(stateBody);
 		continue;
@@ -77,7 +77,7 @@ Logging.LogInfo("Saving server state");
 ServerState.Instance.PrepareForSave(characters.Select(t => t.Character));
 var stateIssueBody = ServerState.Instance.ToStateIssueBody();
 
-if (!options.TestMode)
+if (!options.TestMode.GetValueOrDefault(true))
 {
 
 	if (ServerState.Instance.IssueNumber != null)
