@@ -10,8 +10,8 @@ const string version = "1";
 var productInfo = new ProductHeaderValue(owner, version);
 var options = Parser.Default.ParseArguments<Options>(args).Value;
 var credentialStore = new InMemoryCredentialStore(new Credentials(options.GitHubToken));
+
 var utcNow = DateTimeOffset.UtcNow;
-var since = utcNow.AddHours(-options.PeriodHours);
 
 var ghClient = new GitHubClient(productInfo, credentialStore);
 
@@ -19,7 +19,7 @@ var repository = await ghClient.Repository.Get(owner, repositoryName);
 
 Logging.RateLimitProvider = () => ghClient.GetLastApiInfo()?.RateLimit;
 
-await ServerState.Instance.Initialize(ghClient, repository, utcNow);
+var since = await ServerState.Instance.Initialize(ghClient, repository, options, utcNow);
 
 var playerData = await PlayerDataRepository.Create(ghClient, repository, since);
 
@@ -57,6 +57,7 @@ foreach (var (character, _) in characters)
 	if (options.TestMode.GetValueOrDefault(true))
 	{
 		Logging.LogInfo(stateBody);
+
 		continue;
 	}
 
@@ -79,7 +80,6 @@ var stateIssueBody = ServerState.Instance.ToStateIssueBody();
 
 if (!options.TestMode.GetValueOrDefault(true))
 {
-
 	if (ServerState.Instance.IssueNumber != null)
 	{
 		await ghClient.Issue.Update(
