@@ -1,6 +1,5 @@
 ﻿using System.Collections.Concurrent;
 using System.Text;
-using System.Text.RegularExpressions;
 using Octokit;
 
 namespace Engine;
@@ -20,6 +19,8 @@ public class ServerState
 	public int? IssueNumber => _stateIssueNumber;
 
 	public ServerStatistics Statistics { get; private set; } = null!;
+
+	public DateTime? LastCycleSimulation { get; private set; }
 
 	public StringBuilder Logs { get; } = new();
 
@@ -85,12 +86,13 @@ public class ServerState
 		return result;
 	}
 
-	public async Task Initialize(IGitHubClient gitHubClient, Repository gitHubRepository, DateTimeOffset? utcNow = null)
+	public async Task<DateTimeOffset> Initialize(
+		IGitHubClient gitHubClient,
+		Repository gitHubRepository,
+		Options options,
+		DateTimeOffset utcNow)
 	{
-		if (utcNow != null)
-		{
-			Logs.AppendLine($"Processed at: `{utcNow}`");
-		}
+		Logs.AppendLine($"Processed at: `{utcNow}`");
 
 		var stateIssue = await LoadServerStateIssue(gitHubClient.Issue, gitHubRepository);
 		_stateIssueNumber = stateIssue?.Number;
@@ -111,6 +113,16 @@ public class ServerState
 					entry => (entry.IssueNumber, entry.Exp)));
 
 		Statistics = dto.Statistics;
+
+		var since = options.PeriodHours == null
+			? dto.LastCycleSimulation == null
+				? utcNow.AddHours(-25)
+				: new DateTimeOffset(dto.LastCycleSimulation.Value, TimeSpan.Zero)
+			: utcNow.AddHours(-options.PeriodHours.Value);
+
+		LastCycleSimulation = since.UtcDateTime;
+
+		return since;
 	}
 
 	public IEnumerable<LeaderboardEntryDto> GetLeaderboard(int length)
@@ -129,6 +141,7 @@ public class ServerState
 	{
 		UpdateLeaderboard(characters);
 		Statistics.CyclesSimulated++;
+		LastCycleSimulation = DateTime.UtcNow.AddSeconds(30);
 	}
 
 	private ConcurrentDictionary<string, (int IssueNumber, int Exp)> _leaderboard = new();

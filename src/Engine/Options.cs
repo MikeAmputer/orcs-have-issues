@@ -10,6 +10,6 @@ public class Options
 	[Option("test-mode", Default = true)]
 	public bool? TestMode { get; set; }
 
-	[Option("period-hours", Default = 24)]
-	public int PeriodHours { get; set; }
+	[Option("period-hours", Default = null)]
+	public int? PeriodHours { get; set; }
 }
