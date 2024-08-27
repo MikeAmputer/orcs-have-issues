@@ -9,7 +9,7 @@ A unique multiplayer RPG where the game world unfolds directly within GitHub Iss
 - **Choose Actions:** Post commands like `labor mill`, `fight spider-lair`, or `siege west` as comments on your character's issue. Actions are processed daily at 00:00 UTC.
 - **Track Progress:** View your character's updated stats and logs after actions are executed.
 
-For a full breakdown of gameplay mechanics and strategies, explore the [Wiki](https://github.com/MikeAmputer/orcs-have-issues/wiki) (you can start with the [Quick-Start Guide](https://github.com/MikeAmputer/orcs-have-issues/wiki/Quick-Start)).
+For a full breakdown of gameplay mechanics and strategies, [explore the Wiki](https://github.com/MikeAmputer/orcs-have-issues/wiki) (you can start with the [Quick-Start Guide](https://github.com/MikeAmputer/orcs-have-issues/wiki/Quick-Start)).
 
 > [!IMPORTANT]
 > **_THE GAME IS STILL IN DEVELOPMENT, ALPHA VERSION SERVER STARTS SOON_**
