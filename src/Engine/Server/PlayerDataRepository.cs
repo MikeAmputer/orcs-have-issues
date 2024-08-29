@@ -27,18 +27,34 @@ public class PlayerDataRepository
 		_gitHubRepository = gitHubRepository;
 	}
 
-	public static async Task<PlayerDataRepository> Create(
+	public static async Task<(PlayerDataRepository PlayerData, bool shouldSimulate)> Create(
 		IGitHubClient gitHubClient,
 		Repository gitHubRepository,
 		DateTimeOffset since)
 	{
 		var result = new PlayerDataRepository(gitHubRepository);
 
-		await result.LoadIssues(gitHubClient.Issue, since);
-		await result.LoadComments(gitHubClient.Issue.Comment, since);
+		var anyEditedIssues = await result.LoadIssues(gitHubClient.Issue, since);
+
+		if (!anyEditedIssues)
+		{
+			Logging.LogInfo($"No edited issues since {since}");
+
+			return (result, false);
+		}
+
+		var anyNewComments = await result.LoadComments(gitHubClient.Issue.Comment, since);
+
+		if (!anyNewComments)
+		{
+			Logging.LogInfo($"No new comments since {since}");
+
+			return (result, false);
+		}
+
 		await result.LoadStargazers(gitHubClient.Activity.Starring, gitHubRepository);
 
-		return result;
+		return (result, true);
 	}
 
 	public IEnumerable<(Character Character, string[] Commands)> GetCharacters(DateTimeOffset utcNow)
@@ -50,8 +66,12 @@ public class PlayerDataRepository
 				: new CharacterDto();
 
 			var playerInfo = issue.ToPlayerInfo(_stargazers.Contains(issue.User.Id), state?.Id);
+			var commands = GetCommands(key);
 
-			yield return (new Character(playerInfo, dto, utcNow), GetCommands(key));
+			if (commands.Length != 0)
+			{
+				yield return (new Character(playerInfo, dto, utcNow), commands);
+			}
 		}
 	}
 
