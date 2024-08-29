@@ -21,9 +21,23 @@ Logging.RateLimitProvider = () => ghClient.GetLastApiInfo()?.RateLimit;
 
 var since = await ServerState.Instance.Initialize(ghClient, repository, options, utcNow);
 
-var playerData = await PlayerDataRepository.Create(ghClient, repository, since);
+var (playerData, shouldSimulate) = await PlayerDataRepository.Create(ghClient, repository, since);
+
+if (!shouldSimulate)
+{
+	Logging.LogInfo("Aborted");
+	return;
+}
 
 var characters = playerData.GetCharacters(utcNow).ToList();
+
+if (characters.Count == 0)
+{
+	Logging.LogInfo("No characters to process");
+	Logging.LogInfo("Aborted");
+	return;
+}
+
 await Logging.LogCharactersToFile(characters);
 
 Logging.LogInfo("Executing commands");

@@ -43,7 +43,7 @@ public sealed partial class ActionFightInstance
 		() => [Monster.UndeadSkeleton, Monster.UndeadGhoul]);
 
 	public static readonly ActionFightInstance CryptElite = new(
-		"CryptElite",
+		"Crypt (Elite)",
 		actionPointsCost: 4, goldReward: 52, materialsReward: 0,
 		() => [Monster.UndeadSkeleton, Monster.UndeadLich, Monster.UndeadGhoul]);
 
