@@ -43,7 +43,7 @@ public static class IssueExtensions
 
 	public static ServerStateDto ToServerStateDto(this Issue? issue)
 	{
-		if (issue == null)
+		if (issue == null || issue.Body.IsNullOrWhiteSpace())
 		{
 			return new();
 		}
