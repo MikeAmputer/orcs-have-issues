@@ -1,7 +1,7 @@
 ---
 name: New Orc Character
 about: Use this template to create a new orc character
-title: ''
+title: New Character
 labels: character, orc
 assignees: ''
 
@@ -20,3 +20,6 @@ siege west
 This is just an example; feel free to issue different commands based on your character's goals.
 
 The description of your character and its state will be stored in an auto-generated comment after the first execution.
+
+> [!NOTE]
+> For a full breakdown of gameplay mechanics and strategies, [explore the Wiki](https://github.com/MikeAmputer/orcs-have-issues/wiki) (you can start with the [Quick-Start Guide](https://github.com/MikeAmputer/orcs-have-issues/wiki/Quick-Start)).
