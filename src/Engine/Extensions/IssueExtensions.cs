@@ -12,7 +12,7 @@ public static class IssueExtensions
 
 	public static CharacterDto ToCharacterDto(this IssueComment? comment)
 	{
-		if (comment == null)
+		if (comment == null || comment.Body.IsNullOrWhiteSpace())
 		{
 			return new();
 		}

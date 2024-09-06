@@ -82,6 +82,11 @@ public class PlayerDataRepository
 			return [];
 		}
 
+		if (comment.Body.IsNullOrWhiteSpace())
+		{
+			return [];
+		}
+
 		return comment.Body
 			.Split(["\r\n", "\r", "\n"], StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
 			.Where(command => command.Length <= CommandMaxLength)
