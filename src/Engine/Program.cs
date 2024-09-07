@@ -70,7 +70,7 @@ foreach (var (character, _) in characters)
 
 	if (options.TestMode.GetValueOrDefault(true))
 	{
-		Logging.LogInfo(stateBody);
+		Logging.LogInfo($"{character.PlayerInfo.UserLogin} #{character.PlayerInfo.IssueNumber}\n{stateBody}");
 
 		continue;
 	}
