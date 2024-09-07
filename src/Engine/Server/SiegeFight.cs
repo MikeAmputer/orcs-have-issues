@@ -41,36 +41,41 @@ public class SiegeFight
 		logs.Append($"Humans: `{humanPlayers}` players with reinforcement of `{humanMercs}` mercenaries");
 		logs.AppendLine($" (`{humanContribution}` siege contribution points)");
 
-		var orderByLevel = true;
+		var cycleIndex = 0;
 
 		Race winner;
 		while (true)
 		{
-			Func<Fighter, int> orderKeySelector = orderByLevel
-				? fighter => fighter.Level
-				: fighter => fighter.GetHashCode();
+			cycleIndex++;
 
-			orderByLevel = !orderByLevel;
+			Func<Fighter, int> orderKeySelector = cycleIndex switch
+			{
+				1 => fighter => -fighter.Level,
+				2 => fighter => fighter.Level,
+				_ => fighter => fighter.GetHashCode(),
+			};
 
 			var orcs = orcFighters
 				.Where(orc => orc.CanFight)
-				.OrderByDescending(orderKeySelector)
+				.OrderBy(orderKeySelector)
 				.ToList();
 
 			var humans = humanFighters
 				.Where(hum => hum.CanFight)
-				.OrderByDescending(orderKeySelector)
+				.OrderBy(orderKeySelector)
 				.ToList();
 
 			if (orcs.Count == 0)
 			{
 				winner = Race.Human;
+
 				break;
 			}
 
 			if (humans.Count == 0)
 			{
 				winner = Race.Orc;
+
 				break;
 			}
 
@@ -86,8 +91,6 @@ public class SiegeFight
 		return winner;
 	}
 
-	private const int MaxFightBatchSize = 5;
-
 	private IEnumerable<Fight> BatchFights(
 		Race firstAttacker,
 		IReadOnlyCollection<Fighter> orcs,
@@ -99,10 +102,16 @@ public class SiegeFight
 
 		while (fightersLeft > 0)
 		{
-			var batchSize = Math.Min(MaxFightBatchSize, fightersLeft);
+			var batchSize = Math.Min(5, fightersLeft);
+
 			if (fightersLeft is > 5 and <= 8)
 			{
 				batchSize = 4;
+			}
+
+			if (fightersLeft < 5)
+			{
+				batchSize++;
 			}
 
 			var orcFighters = orcs.Skip(fightersTaken).Take(batchSize).ToArray();
@@ -199,7 +208,7 @@ public class SiegeFight
 
 		var log = character.Logs;
 		log.AppendLine();
-		log.AppendLine($"**_Siege summary:_** `{(character.Race == winner ? "Victory" : "Loss")}`");
+		log.AppendLine($"**_Siege summary:_** `{(character.Race == winner ? "Victory" : "Defeat")}`");
 		log.AppendLine($"- Contributions points: {character.SiegeContributionPoints}");
 		log.AppendLine($"- Kills: {tracker.Kills}");
 		log.AppendLine($"- EXP earned: {tracker.ExpEarned}");
