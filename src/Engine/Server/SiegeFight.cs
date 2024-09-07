@@ -80,7 +80,8 @@ public class SiegeFight
 			}
 		}
 
-		LogPlayers();
+		RewardWinners(winner);
+		LogPlayers(winner);
 
 		return winner;
 	}
@@ -174,26 +175,36 @@ public class SiegeFight
 		}
 	}
 
-	private void LogPlayers()
+	private void RewardWinners(Race winner)
+	{
+		if (winner == Race.None)
+		{
+			return;
+		}
+
+		Participants[winner].ForEach(character => character.RewardSiegeWinner());
+	}
+
+	private void LogPlayers(Race winner)
 	{
 		Participants
 			.SelectMany(kvp => kvp.Value)
 			.ToList()
-			.ForEach(LogPlayer);
+			.ForEach(character => LogPlayer(character, winner));
 	}
 
-	private void LogPlayer(Character character)
+	private void LogPlayer(Character character, Race winner)
 	{
 		var tracker = character.StopBattleTracker();
 
 		var log = character.Logs;
 		log.AppendLine();
-		log.AppendLine("**_Siege summary:_**");
+		log.AppendLine($"**_Siege summary:_** `{(character.Race == winner ? "Victory" : "Loss")}`");
 		log.AppendLine($"- Contributions points: {character.SiegeContributionPoints}");
 		log.AppendLine($"- Kills: {tracker.Kills}");
 		log.AppendLine($"- EXP earned: {tracker.ExpEarned}");
 		log.AppendLine($"- Damage dealt: {tracker.DamageDealt}");
-		log.AppendLine($"- Damage taken: {tracker.DamageTaken}");
+		log.AppendLine($"- HP lost: {tracker.HealthDelta}");
 		log.AppendLine($"- Damage mitigated: {tracker.DamageMitigated}");
 		log.AppendLine();
 	}

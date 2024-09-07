@@ -68,7 +68,7 @@ public abstract class Fighter
 
 	public virtual void ScoreFrag(Fighter target) { }
 
-	private void Track(Action<BattleTracker> trackerAction)
+	protected void Track(Action<BattleTracker> trackerAction)
 	{
 		if (_battleTracker != null)
 		{

@@ -120,9 +120,21 @@ public class Character : Fighter
 
 	public int PrepareForSiege()
 	{
+		var startingHp = CurrentHp;
+
 		var hpLvlUps = LevelUps.Count(l => l == LevelUpSelection.Hp);
 		CurrentHp = Math.Min(MaxHp, CurrentHp + MaxHp / 5 + hpLvlUps * 4);
 		StartBattleTracker();
+
+		var hpRegained = CurrentHp - startingHp;
+
+		Logs.Append("You are taking a short rest before the siege.");
+		if (hpRegained > 0)
+		{
+			Logs.Append($" HP regained: `+{hpRegained} HP`.");
+		}
+
+		Logs.AppendLine($" Current HP: {CurrentHp}/{MaxHp}.");
 
 		return SiegeContributionPoints;
 	}
@@ -164,6 +176,14 @@ public class Character : Fighter
 	public override void ScoreFrag(Fighter target)
 	{
 		LevelInfo.AddExp(target.ExpReward);
+	}
+
+	public void RewardSiegeWinner()
+	{
+		const int expReward = 5;
+
+		LevelInfo.AddExp(expReward);
+		Track(t => t.ExpEarned += expReward);
 	}
 
 	public bool CraftWeapon(int gold, int mats) =>
