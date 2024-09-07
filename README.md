@@ -16,4 +16,4 @@ A unique multiplayer RPG where the game world unfolds directly within GitHub Iss
 > [Alfa test server](https://github.com/MikeAmputer/orcs-have-issues/issues/14) was started on _September 6, 2024_. While no final decision has been made, there is a possibility that it may be wiped in the future.
 
 > [!IMPORTANT]
-> This version was rapidly developed and has not been thoroughly tested. It currently lacks end-game content and may not be perfectly tuned. Future development will depend on player activity and feedback. If the game continues to develop, potential future features include: raids, profile pictures and achievement badges, neutral faction, class perks, and more.
+> This version was rapidly developed and has not been thoroughly tested. It currently lacks end-game content and may not be perfectly tuned. Future development will depend on player activity and feedback. If the game continues to develop, potential future features include: raids, profile pictures and achievement badges, neutral faction, class perks, and more. So, if you enjoy the game, please consider sharing the repository link with your friends.
