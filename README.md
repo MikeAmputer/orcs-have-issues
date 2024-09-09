@@ -10,6 +10,11 @@ A unique multiplayer RPG where the game world unfolds directly within GitHub Iss
 - **Track Progress:** View your character's updated stats and logs after actions are executed.
 - **Earn Achievements:** [Check out the `orcs-earn-badges` repository](https://github.com/MikeAmputer/orcs-earn-badges) to track your achievements and add badges to your GitHub profile README _(more badges come soon)_.
 
+<a><img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/newcomer.png" alt="Newcomer" title="Create a character issue" width="64"></a>
+<a><img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/reactions-bronze.png" alt="Reactions Bronze" title="Earn 5 heart emojis on your character issue" width="64"></a>
+<a><img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/reactions-silver.png" alt="Reactions Silver" title="Earn 25 heart emojis on your character issue" width="64"></a>
+<a><img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/reactions-gold.png" alt="Reactions Gold" title="Earn 100 heart emojis on your character issue" width="64"></a>
+
 > [!NOTE]
 > For a full breakdown of gameplay mechanics and strategies, [explore the Wiki](https://github.com/MikeAmputer/orcs-have-issues/wiki) (you can start with the [Quick-Start Guide](https://github.com/MikeAmputer/orcs-have-issues/wiki/Quick-Start)).
 
