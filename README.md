@@ -17,6 +17,7 @@ A unique multiplayer RPG where the game world unfolds directly within GitHub Iss
 <a><img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/cycles-bronze.png" alt="Cycles Bronze" title="Play for 10 days total" width="64"></a>
 <a><img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/cycles-silver.png" alt="Cycles Silver" title="Play for 100 days total" width="64"></a>
 <a><img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/cycles-gold.png" alt="Cycles Gold" title="Play for 365 days total" width="64"></a>
+<a><img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/clean-issue.png" alt="Clean Issue" title="Keep your character issue clean" width="64"></a>
 
 > [!NOTE]
 > For a full breakdown of gameplay mechanics and strategies, [explore the Wiki](https://github.com/MikeAmputer/orcs-have-issues/wiki) (you can start with the [Quick-Start Guide](https://github.com/MikeAmputer/orcs-have-issues/wiki/Quick-Start)).
