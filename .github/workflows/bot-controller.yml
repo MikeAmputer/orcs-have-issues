@@ -1,0 +1,17 @@
+name: Bot Controller
+
+on:
+  schedule:
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+
+jobs:
+  controller:
+    name: Controller
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Run Simulation
+      run: dotnet run --project src/BotController/BotController.csproj --configuration Release -- --token ${{ secrets.REPOSITORY_TOKEN }} --test-mode false
