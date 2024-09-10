@@ -13,5 +13,5 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Run Simulation
+    - name: Run BotController
       run: dotnet run --project src/BotController/BotController.csproj --configuration Release -- --token ${{ secrets.REPOSITORY_TOKEN }} --test-mode false
