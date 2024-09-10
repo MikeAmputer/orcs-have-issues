@@ -5,15 +5,10 @@ namespace Engine;
 
 public class PlayerDataRepository
 {
-	private static readonly Regex CommentIssueNumberRegex = new(@"/issues/(\d+)", RegexOptions.Compiled);
-
 	private static readonly ApiOptions BatchPagination = new()
 	{
 		PageSize = 100
 	};
-
-	private const int CommandMaxLength = 100;
-	private const int CommandsMaxQuantity = 20;
 
 	private readonly Repository _gitHubRepository;
 	private readonly Dictionary<int, Issue> _issues = new();
@@ -38,7 +33,7 @@ public class PlayerDataRepository
 
 		if (!anyEditedIssues)
 		{
-			Logging.LogInfo($"No edited issues since {since}");
+			Logging.LogInfo($"No edited player character issues since {since}");
 
 			return (result, false);
 		}
@@ -82,16 +77,7 @@ public class PlayerDataRepository
 			return [];
 		}
 
-		if (comment.Body.IsNullOrWhiteSpace())
-		{
-			return [];
-		}
-
-		return comment.Body
-			.Split(["\r\n", "\r", "\n"], StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
-			.Where(command => command.Length <= CommandMaxLength)
-			.Take(CommandsMaxQuantity)
-			.ToArray();
+		return comment.GetCommands();
 	}
 
 	private async Task<bool> LoadIssues(IIssuesClient issuesClient, DateTimeOffset since)
@@ -153,8 +139,7 @@ public class PlayerDataRepository
 		Logging.LogGitHubClientState();
 
 		var commentsByIssue = comments
-			.GroupBy(comment => Convert.ToInt32(
-				CommentIssueNumberRegex.Match(comment.HtmlUrl).TryGetGroupValue(1, "0")))
+			.GroupBy(comment => comment.GetIssueNumber())
 			.Where(group => group.Key > 0 && _issues.ContainsKey(group.Key))
 			.ToList();
 
@@ -170,7 +155,7 @@ public class PlayerDataRepository
 				throw new InvalidOperationException();
 			}
 
-			var actionsComment = FindActionsComment(group, issue.User.Id);
+			var actionsComment = group.FindActionsComment(issue.User.Id);
 
 			if (actionsComment == null)
 			{
@@ -179,7 +164,7 @@ public class PlayerDataRepository
 				continue;
 			}
 
-			var stateComment = FindStateComment(group, _gitHubRepository.Owner.Id);
+			var stateComment = group.FindStateComment(_gitHubRepository.Owner.Id);
 
 			if (stateComment == null)
 			{
@@ -190,7 +175,7 @@ public class PlayerDataRepository
 					issue.Number,
 					BatchPagination);
 
-				stateComment = FindStateComment(issueComments, _gitHubRepository.Owner.Id);
+				stateComment = issueComments.FindStateComment(_gitHubRepository.Owner.Id);
 
 				if (stateComment == null)
 				{
@@ -206,21 +191,6 @@ public class PlayerDataRepository
 		Logging.LogGitHubClientState();
 
 		return true;
-	}
-
-	private static IssueComment? FindActionsComment(IEnumerable<IssueComment> comments, long issueAuthor)
-	{
-		return comments
-			.Where(comment => comment.User.Id == issueAuthor)
-			.MaxBy(comment => comment.CreatedAt);
-	}
-
-	private static IssueComment? FindStateComment(IEnumerable<IssueComment> comments, long repositoryOwner)
-	{
-		return comments
-			.Where(comment => comment.User.Id == repositoryOwner)
-			.Where(comment => comment.Body.StartsWith("### Stats"))
-			.MinBy(comment => comment.CreatedAt);
 	}
 
 	private async Task LoadStargazers(IStarredClient starredClient, Repository gitHubRepository)
