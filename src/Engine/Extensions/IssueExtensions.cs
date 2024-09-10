@@ -10,6 +10,8 @@ public static class IssueExtensions
 
 	private static readonly Regex DtoRegex = new(DtoRegexPattern, RegexOptions.Compiled);
 
+	private static readonly Regex CommentIssueNumberRegex = new(@"/issues/(\d+)", RegexOptions.Compiled);
+
 	public static CharacterDto ToCharacterDto(this IssueComment? comment)
 	{
 		if (comment == null || comment.Body.IsNullOrWhiteSpace())
@@ -57,5 +59,43 @@ public static class IssueExtensions
 
 		return JsonSerializer.Deserialize<ServerStateDto>(jsonString)
 			?? throw new InvalidOperationException($"Unable to deserialize server state DTO: {issue.HtmlUrl}.");
+	}
+
+	public static int GetIssueNumber(this IssueComment comment)
+	{
+		return Convert.ToInt32(CommentIssueNumberRegex.Match(comment.HtmlUrl).TryGetGroupValue(1, "0"));
+	}
+
+	public static IssueComment? FindActionsComment(this IEnumerable<IssueComment> comments, long issueAuthor)
+	{
+		return comments
+			.Where(comment => comment.User.Id == issueAuthor)
+			.Where(comment => !comment.Body.StartsWith("### Stats"))
+			.MaxBy(comment => comment.CreatedAt);
+	}
+
+	public static IssueComment? FindStateComment(this IEnumerable<IssueComment> comments, long repositoryOwner)
+	{
+		return comments
+			.Where(comment => comment.User.Id == repositoryOwner)
+			.Where(comment => comment.Body.StartsWith("### Stats"))
+			.MinBy(comment => comment.CreatedAt);
+	}
+
+	public static string[] GetCommands(this IssueComment comment)
+	{
+		const int commandMaxLength = 100;
+		const int commandsMaxQuantity = 20;
+
+		if (comment.Body.IsNullOrWhiteSpace())
+		{
+			return [];
+		}
+
+		return comment.Body
+			.Split(["\r\n", "\r", "\n"], StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+			.Where(command => command.Length <= commandMaxLength)
+			.Take(commandsMaxQuantity)
+			.ToArray();
 	}
 }

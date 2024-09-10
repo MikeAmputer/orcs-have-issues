@@ -33,10 +33,14 @@ var characters = playerData.GetCharacters(utcNow).ToList();
 
 if (characters.Count == 0)
 {
-	Logging.LogInfo("No characters to process");
+	Logging.LogInfo("No player characters to process");
 	Logging.LogInfo("Aborted");
 	return;
 }
+
+var botRepository = await BotRepository.Create(ghClient, repository);
+
+characters.AddRange(botRepository.GetBotPlayers(utcNow));
 
 await Logging.LogCharactersToFile(characters);
 
@@ -123,4 +127,4 @@ else
 }
 
 Logging.LogGitHubClientState();
-Logging.LogInfo("Complete");
+Logging.LogInfo("Completed");
