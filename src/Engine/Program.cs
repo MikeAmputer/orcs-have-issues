@@ -20,6 +20,7 @@ var repository = await ghClient.Repository.Get(owner, repositoryName);
 Logging.RateLimitProvider = () => ghClient.GetLastApiInfo()?.RateLimit;
 
 var since = await ServerState.Instance.Initialize(ghClient, repository, options, utcNow);
+since = since.AddMinutes(-2);
 
 var (playerData, shouldSimulate) = await PlayerDataRepository.Create(ghClient, repository, since);
 
@@ -74,7 +75,11 @@ foreach (var (character, _) in characters)
 
 	if (options.TestMode.GetValueOrDefault(true))
 	{
-		Logging.LogInfo($"{character.PlayerInfo.UserLogin} #{character.PlayerInfo.IssueNumber}\n{stateBody}");
+		var title = character.PlayerInfo.IsBot
+			? character.PlayerInfo.IssueTitle
+			: $"{character.PlayerInfo.UserLogin} #{character.PlayerInfo.IssueNumber}";
+
+		Logging.LogInfo($"{title}\n{stateBody}");
 
 		continue;
 	}

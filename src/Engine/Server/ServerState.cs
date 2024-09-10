@@ -141,14 +141,14 @@ public class ServerState
 	{
 		UpdateLeaderboard(characters);
 		Statistics.CyclesSimulated++;
-		LastCycleSimulation = DateTime.UtcNow.AddSeconds(30);
+		LastCycleSimulation = DateTime.UtcNow;
 	}
 
 	private ConcurrentDictionary<string, (int IssueNumber, int Exp)> _leaderboard = new();
 
 	private void UpdateLeaderboard(IEnumerable<Character> characters)
 	{
-		foreach (var character in characters)
+		foreach (var character in characters.Where(c => !c.PlayerInfo.IsBot))
 		{
 			_leaderboard.AddOrUpdate(
 				character.PlayerInfo.UserLogin,

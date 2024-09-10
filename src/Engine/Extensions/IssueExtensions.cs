@@ -30,16 +30,18 @@ public static class IssueExtensions
 			?? throw new InvalidOperationException($"Unable to deserialize character DTO: {comment.HtmlUrl}.");
 	}
 
-	public static PlayerInfo ToPlayerInfo(this Issue issue, bool isStargazer, long? stateCommentId)
+	public static PlayerInfo ToPlayerInfo(this Issue issue, bool isStargazer, long? stateCommentId, bool isBot = false)
 	{
 		return new()
 		{
 			IssueNumber = issue.Number,
 			UserLogin = issue.User.Login,
 			StateCommentId = stateCommentId,
+			IssueTitle = issue.Title,
 			IssueReactions = issue.Reactions.Heart,
 			IsStargazer = isStargazer,
 			IssueLabels = issue.Labels.Select(label => label.Name).ToHashSet(),
+			IsBot = isBot,
 		};
 	}
 

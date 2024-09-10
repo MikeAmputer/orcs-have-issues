@@ -35,7 +35,7 @@ foreach (var (character, issue, comment) in bots)
 	var actions = ActionsSelector.NextBestActions(character);
 	var actionsContent = string.Join('\n', actions);
 
-	if (options.TestMode!.Value)
+	if (options.TestMode.GetValueOrDefault(true))
 	{
 		Logging.LogInfo($"Bot {issue.Title} #{issue.Number}\n{actionsContent}");
 	}
