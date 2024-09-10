@@ -58,7 +58,8 @@ public static class Logging
 	private static void AppendCharacter(StringBuilder sb, Character character, string[] commands)
 	{
 		var playerInfo = character.PlayerInfo;
-		sb.AppendLine($"Character #{playerInfo.IssueNumber} {playerInfo.UserLogin}");
+		var name = playerInfo.IsBot ? playerInfo.IssueTitle : playerInfo.UserLogin;
+		sb.AppendLine($"Character #{playerInfo.IssueNumber} {name}");
 		sb.Append($"StateCommentId: {playerInfo.StateCommentId?.ToString() ?? "none"}; ");
 		sb.AppendLine($"IsStargazer: {playerInfo.IsStargazer}; IssueReactions: {playerInfo.IssueReactions}");
 		sb.AppendLine($"DTO: {CharacterDto.FromCharacter(character).ToString()}");
