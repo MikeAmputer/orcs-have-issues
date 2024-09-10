@@ -61,7 +61,7 @@ public class BotRepository
 				? state.ToCharacterDto()
 				: new CharacterDto();
 
-			var playerInfo = issue.ToPlayerInfo(false, state?.Id);
+			var playerInfo = issue.ToPlayerInfo(false, state?.Id, true);
 
 			_actions.TryGetValue(issueNumber, out var commandsComment);
 
