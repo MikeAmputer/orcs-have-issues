@@ -171,6 +171,7 @@ public class Character : Fighter
 		DisableFortressBuff();
 		_fortressBuff = ServerState.Instance.GetFortressBuffFor(Race);
 		Statistics.CyclesPlayed++;
+		Statistics.Level = Level;
 	}
 
 	public override void ScoreFrag(Fighter target)
