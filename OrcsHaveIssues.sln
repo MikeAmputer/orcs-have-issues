@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Tests", "src\Engine.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emulator", "src\Emulator\Emulator.csproj", "{278822E3-21AB-4409-A24F-026B1FB5AF1C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotController", "src\BotController\BotController.csproj", "{2D6AA44D-CBE5-4708-B4C7-10242B1833D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{278822E3-21AB-4409-A24F-026B1FB5AF1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{278822E3-21AB-4409-A24F-026B1FB5AF1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{278822E3-21AB-4409-A24F-026B1FB5AF1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D6AA44D-CBE5-4708-B4C7-10242B1833D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D6AA44D-CBE5-4708-B4C7-10242B1833D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D6AA44D-CBE5-4708-B4C7-10242B1833D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D6AA44D-CBE5-4708-B4C7-10242B1833D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -127,4 +127,4 @@ else
 }
 
 Logging.LogGitHubClientState();
-Logging.LogInfo("Complete");
+Logging.LogInfo("Completed");

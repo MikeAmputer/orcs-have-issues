@@ -52,8 +52,8 @@ public class BotRepository
 		}
 	}
 
-	public IEnumerable<(Character Character, Issue issue, IssueComment? actionsComment)> GetBotSettings(
-		DateTimeOffset utcNow)
+	public IEnumerable<(Character Character, Issue Issue, IssueComment? ActionsComment)> GetBotSettings(
+		DateTimeOffset? utcNow = null)
 	{
 		foreach (var (issueNumber, issue) in _issues)
 		{
