@@ -8,7 +8,7 @@ A unique multiplayer RPG where the game world unfolds directly within GitHub Iss
 - **Earn Perks:** Add a character description, get emoji reactions, and star the repo to boost your stats!
 - **Choose Actions:** Post commands like `labor mill`, `fight spider-lair`, or `siege west` as comments on your character's issue. Actions are processed daily at 00:00 UTC.
 - **Track Progress:** View your character's updated stats and logs after actions are executed.
-- **Earn Achievements:** [Check out the `orcs-earn-badges` repository](https://github.com/MikeAmputer/orcs-earn-badges) to track your achievements and add badges to your GitHub profile README _(more badges coming soon)_.
+- **Earn Achievements:** Check out the [`orcs-earn-badges`](https://github.com/MikeAmputer/orcs-earn-badges) repository to track your achievements and add badges to your GitHub profile README _(more badges coming soon)_.
 
 <table>
   <tr>
