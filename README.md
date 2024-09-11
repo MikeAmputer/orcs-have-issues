@@ -26,6 +26,9 @@ A unique multiplayer RPG where the game world unfolds directly within GitHub Iss
       <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/cycles-bronze.png" alt="Cycles Bronze" title="Play for 10 days total" width="64">
       <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/cycles-silver.png" alt="Cycles Silver" title="Play for 100 days total" width="64">
       <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/cycles-gold.png" alt="Cycles Gold" title="Play for 365 days total" width="64">
+      <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/craft-bronze.png" alt="Craft Bronze" title="Craft your first wargear" width="64">
+      <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/craft-silver.png" alt="Craft Silver" title="Reach a combined wargear rank of 4" width="64">
+      <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/craft-gold.png" alt="Craft Gold" title="Reach a combined wargear rank of 10" width="64">
       <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/clean-issue.png" alt="Clean Issue" title="Keep your character issue clean" width="64">
     </td>
   </tr>
