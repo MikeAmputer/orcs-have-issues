@@ -4,6 +4,7 @@ namespace Engine;
 
 public class Character : Fighter
 {
+	public override Enemy Type => Enemy.Player;
 	public PlayerInfo PlayerInfo { get; }
 
 	public Race Race { get; private set; }
@@ -174,9 +175,12 @@ public class Character : Fighter
 		Statistics.Level = Level;
 	}
 
-	public override void ScoreFrag(Fighter target)
+	protected override void ScoreFrag(Fighter target)
 	{
 		LevelInfo.AddExp(target.ExpReward);
+
+		Statistics.Kills.TryAdd(target.Type, 0);
+		Statistics.Kills[target.Type]++;
 	}
 
 	public void RewardSiegeWinner()

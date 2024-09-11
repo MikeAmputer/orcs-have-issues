@@ -41,10 +41,12 @@ public static class ActionsSelector
 		{
 			case < 3:
 				return "spider-lair";
+			case < 4:
+				return "goblin-camp";
 			case < 5:
-				return "goblin-camp";
+				return "bandit-hideout";
 			default:
-				return "goblin-camp";
+				return "spider-lair-elite";
 		}
 	}
 

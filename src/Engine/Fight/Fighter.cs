@@ -2,6 +2,7 @@
 
 public abstract class Fighter
 {
+	public abstract Enemy Type { get; }
 	protected abstract int BaseDamage { get; }
 
 	public virtual int Level => 0;
@@ -44,6 +45,7 @@ public abstract class Fighter
 		source.Track(t => t.DamageDealt += postMitigationDamage);
 		if (!CanFight)
 		{
+			source.ScoreFrag(this);
 			source.Track(t => t.Kills++);
 			source.Track(t => t.ExpEarned += ExpReward);
 		}
@@ -66,7 +68,7 @@ public abstract class Fighter
 		return tracker ?? new();
 	}
 
-	public virtual void ScoreFrag(Fighter target) { }
+	protected virtual void ScoreFrag(Fighter target) { }
 
 	protected void Track(Action<BattleTracker> trackerAction)
 	{
