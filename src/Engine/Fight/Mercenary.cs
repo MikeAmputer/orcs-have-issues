@@ -14,6 +14,7 @@ public class Mercenary : Fighter
 	public static Mercenary HumanPaladin => new(level: 7, hp: 115, damage: 18, def: 8);
 	public static Mercenary HumanCaptain => new(level: 10, hp: 135, damage: 24, def: 11);
 
+	public override Enemy Type => Enemy.Mercenary;
 	protected override int BaseDamage => _baseDamage;
 	public override int ExpReward => 5 + Level * 3;
 	public override int Level => _level;

@@ -99,8 +99,6 @@ public class Fight
 			return false;
 		}
 
-		source.ScoreFrag(target);
-
 		if (targetIsAttacker)
 		{
 			_aliveAttackers.Remove(targetId);
