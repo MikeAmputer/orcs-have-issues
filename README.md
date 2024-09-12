@@ -32,6 +32,9 @@ A unique multiplayer RPG where the game world unfolds directly within GitHub Iss
       <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/spider-slayer-bronze.png" alt="Spider Slayer Bronze" title="Slay 10 spiders" width="64">
       <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/spider-slayer-silver.png" alt="Spider Slayer Silver" title="Slay 50 spiders" width="64">
       <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/spider-slayer-gold.png" alt="Spider Slayer Gold" title="Slay 250 spiders" width="64">
+      <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/goblin-slayer-bronze.png" alt="Goblin Slayer Bronze" title="Slay 10 goblins" width="64">
+      <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/goblin-slayer-silver.png" alt="Goblin Slayer Silver" title="Slay 50 goblins" width="64">
+      <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/goblin-slayer-gold.png" alt="Goblin Slayer Gold" title="Slay 250 goblins" width="64">
       <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/clean-issue.png" alt="Clean Issue" title="Keep your character issue clean" width="64">
     </td>
   </tr>
