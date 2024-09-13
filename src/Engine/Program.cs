@@ -19,7 +19,7 @@ var repository = await ghClient.Repository.Get(owner, repositoryName);
 
 Logging.RateLimitProvider = () => ghClient.GetLastApiInfo()?.RateLimit;
 
-var since = await ServerState.Instance.Initialize(ghClient, repository, options, utcNow);
+var since = await ServerState.Instance.Initialize(ghClient, repository, options.PeriodHours, utcNow);
 since = since.AddMinutes(-2);
 
 var (playerData, shouldSimulate) = await PlayerDataRepository.Create(ghClient, repository, since);
