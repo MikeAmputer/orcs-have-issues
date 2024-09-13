@@ -89,7 +89,7 @@ public class ServerState
 	public async Task<DateTimeOffset> Initialize(
 		IGitHubClient gitHubClient,
 		Repository gitHubRepository,
-		Options options,
+		int? periodHours,
 		DateTimeOffset utcNow)
 	{
 		Logs.AppendLine($"Processed at: `{utcNow}`");
@@ -114,11 +114,11 @@ public class ServerState
 
 		Statistics = dto.Statistics;
 
-		var since = options.PeriodHours == null
+		var since = periodHours == null
 			? dto.LastCycleSimulation == null
 				? utcNow.AddHours(-25)
 				: new DateTimeOffset(dto.LastCycleSimulation.Value, TimeSpan.Zero)
-			: utcNow.AddHours(-options.PeriodHours.Value);
+			: utcNow.AddHours(-periodHours.Value);
 
 		LastCycleSimulation = since.UtcDateTime;
 

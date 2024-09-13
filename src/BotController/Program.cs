@@ -15,9 +15,11 @@ var credentialStore = new InMemoryCredentialStore(new Credentials(options.GitHub
 
 var ghClient = new GitHubClient(productInfo, credentialStore);
 
+var repository = await ghClient.Repository.Get(owner, repositoryName);
+
 Logging.RateLimitProvider = () => ghClient.GetLastApiInfo()?.RateLimit;
 
-var repository = await ghClient.Repository.Get(owner, repositoryName);
+await ServerState.Instance.Initialize(ghClient, repository, null, DateTimeOffset.UtcNow);
 
 var botRepository = await BotRepository.Create(ghClient, repository);
 
