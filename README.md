@@ -38,9 +38,9 @@ A unique multiplayer RPG where the game world unfolds directly within GitHub Iss
       <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/bandit-slayer-bronze.png" alt="Bandit Slayer Bronze" title="Slay 10 bandits" width="64">
       <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/bandit-slayer-silver.png" alt="Bandit Slayer Silver" title="Slay 50 bandits" width="64">
       <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/bandit-slayer-gold.png" alt="Bandit Slayer Gold" title="Slay 250 bandits" width="64">
-      <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/undead-slayer-bronze.png" alt="Undead Slayer Bronze" title="Slay 10 undeads" width="64">
-      <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/undead-slayer-silver.png" alt="Undead Slayer Silver" title="Slay 50 undeads" width="64">
-      <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/undead-slayer-gold.png" alt="Undead Slayer Gold" title="Slay 250 undeads" width="64">
+      <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/undead-slayer-bronze.png" alt="Undead Slayer Bronze" title="Slay 10 undead" width="64">
+      <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/undead-slayer-silver.png" alt="Undead Slayer Silver" title="Slay 50 undead" width="64">
+      <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/undead-slayer-gold.png" alt="Undead Slayer Gold" title="Slay 250 undead" width="64">
       <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/clean-issue.png" alt="Clean Issue" title="Keep your character issue clean" width="64">
     </td>
   </tr>
