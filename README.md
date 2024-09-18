@@ -19,7 +19,6 @@ A unique multiplayer RPG where the game world unfolds directly within GitHub Iss
       </p>
     </td>
     <td>
-      <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/newcomer.png" alt="Newcomer" title="Create a character issue" width="64">
       <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/reactions-bronze.png" alt="Reactions Bronze" title="Earn 5 heart emojis on your character issue" width="64">
       <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/reactions-silver.png" alt="Reactions Silver" title="Earn 25 heart emojis on your character issue" width="64">
       <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/reactions-gold.png" alt="Reactions Gold" title="Earn 100 heart emojis on your character issue" width="64">
@@ -41,6 +40,10 @@ A unique multiplayer RPG where the game world unfolds directly within GitHub Iss
       <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/undead-slayer-bronze.png" alt="Undead Slayer Bronze" title="Slay 10 undead" width="64">
       <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/undead-slayer-silver.png" alt="Undead Slayer Silver" title="Slay 50 undead" width="64">
       <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/undead-slayer-gold.png" alt="Undead Slayer Gold" title="Slay 250 undead" width="64">
+      <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/pvp-kills-bronze.png" alt="PvP Kills Bronze" title="Get 5 PvP kills" width="64">
+      <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/pvp-kills-silver.png" alt="PvP Kills Silver" title="Get 25 PvP kills" width="64">
+      <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/pvp-kills-gold.png" alt="PvP Kills Gold" title="Get 100 PvP kills" width="64">
+      <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/newcomer.png" alt="Newcomer" title="Create a character issue" width="64">
       <img src="https://github.com/MikeAmputer/orcs-earn-badges/blob/master/img/clean-issue.png" alt="Clean Issue" title="Keep your character issue clean" width="64">
     </td>
   </tr>
