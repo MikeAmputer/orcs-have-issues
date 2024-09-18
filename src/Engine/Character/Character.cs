@@ -81,6 +81,15 @@ public class Character : Fighter
 		Gold += gold;
 		Materials += materials;
 		SiegeContributionPoints += siegeContribution;
+
+		Statistics.GoldEarned += gold;
+		Statistics.SiegeContribution += siegeContribution;
+	}
+
+	public void TradeMaterials(int price, int amount)
+	{
+		Gold -= price * amount;
+		Materials += amount;
 	}
 
 	public void SpendAp(int ap)
@@ -173,6 +182,11 @@ public class Character : Fighter
 		_fortressBuff = ServerState.Instance.GetFortressBuffFor(Race);
 		Statistics.CyclesPlayed++;
 		Statistics.Level = Level;
+
+		if (IsSiegeParticipant)
+		{
+			Statistics.Sieges++;
+		}
 	}
 
 	protected override void ScoreFrag(Fighter target)
@@ -187,6 +201,7 @@ public class Character : Fighter
 	{
 		const int expReward = 5;
 
+		Statistics.SiegesWon++;
 		LevelInfo.AddExp(expReward);
 		Track(t => t.ExpEarned += expReward);
 	}
