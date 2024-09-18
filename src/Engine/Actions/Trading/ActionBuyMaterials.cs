@@ -7,7 +7,7 @@ public class ActionBuyMaterials : ActionBase<int, QuantityActionParametersProvid
 		var price = ServerState.Instance.MaterialsPriceFor(character.Race);
 		var toBuy = Math.Min(quantity, character.Gold / price);
 
-		character.AddReward(0, -price * toBuy, toBuy);
+		character.TradeMaterials(price, toBuy);
 
 		return ActionReport.FromMessage($"Materials trade: `-{price * toBuy} Gold` `+{toBuy} Materials`");
 	}
